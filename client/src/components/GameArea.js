@@ -20,7 +20,6 @@ import {
   Popover,
   UncontrolledPopover,
 } from 'reactstrap';
-import Axios from 'axios';
 
 class GameArea extends Component {
   lordyUrl = 'https://api.scryfall.com/cards/1d9d8732-9ff2-42e4-bdfc-723cb6a76969?format=json';
