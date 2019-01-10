@@ -17,8 +17,6 @@ import {
   Col,
   Button,
   ButtonGroup,
-  Popover,
-  UncontrolledPopover,
 } from 'reactstrap';
 
 class GameArea extends Component {
