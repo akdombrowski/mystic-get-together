@@ -168,7 +168,7 @@ class GameArea extends Component {
                       this.state.top_row.map((cardInfo) => {
                         return (
                           <Col
-                            xs="1"
+                            xs="2"
                             style={
                               {
                                 "min-width": "80px",

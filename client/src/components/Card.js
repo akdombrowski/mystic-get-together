@@ -99,7 +99,7 @@ class Card extends React.Component {
 
         {/* Card name and mana cost row */}
         <Row
-          className="card-name-cost-row d-inline-flex mx-0 px-1 justify-content-between flex-grow-0 flex-shrink-0"
+          className="card-name-cost-row d-inline-flex flex-nowrap mw-100 mx-0 px-1 justify-content-between flex-grow-0 flex-shrink-0"
           style={
             {
               "font-size": "1.5vh",
@@ -111,7 +111,13 @@ class Card extends React.Component {
           {/* Card name */}
           <Col
             xs="6"
-            className="card-name-col px-0 flex-grow-1 flex-shrink-1 justify-content-start"
+
+            className="card-name-col pl-0 pr-1 flex-grow-0 flex-shrink-2 justify-content-start"
+            style={{
+              "flex-basis": "5%",
+              "max-width": "80%"
+            }}
+
           >
             <p
               className="card-name text-left mb-0 font-weight-bold"
@@ -120,34 +126,37 @@ class Card extends React.Component {
                   "text-overflow": "ellipsis",
                   "overflow": "hidden",
                   "white-space": "nowrap",
-                  "min-width": "0"
                 }
               }
             >
-              {this.props.name}
+              <small>{this.props.name}</small>
             </p>
           </Col>
 
           {/* Mana cost */}
-
           <Col
-            xs="6"
-            className="card-mana-cost-col px-0 flex-shrink-1 flex-grow-1 justify-content-end">
+            xs="4"
+            className="card-mana-cost-col px-0 flex-shrink-1 flex-grow-2 justify-content-end"
+            style={{
+              "flex-basis": "95%",
+              "min-width": "20%"
+            }}
+          >
             <p
-              className="card-cost text-right text-nowrap mb-0"
+              className="card-cost text-right align-middle text-nowrap mb-0"
               style={
                 {
                   "text-overflow": "ellipsis",
                   "overflow": "hidden",
                   "white-space": "nowrap",
-                  "min-width": "0"
                 }
               }
             >
-              {this.props.cost}
+              <small>{this.props.cost}</small>
             </p>
           </Col>
         </Row>
+
 
 
         {/* Image row with a col wrapper to control size of image */}
@@ -155,7 +164,8 @@ class Card extends React.Component {
           className="card-art-row justify-content-center mw-100 w-100 m-0 px-1 flex-grow-1 flex-shrink-1"
           style={
             {
-              "flex-basis": "12vh",
+
+              "flex-basis": "40%",
               "overflow": "hidden"
             }
           }
@@ -166,7 +176,8 @@ class Card extends React.Component {
           >
             <Media
               obj
-              className="card-art-image img-fluid d-block mx-auto mh-100"
+
+              className="card-art-image img-fluid d-block mx-auto h-100 mh-100 w-100 mw-100"
               alt="Card Art"
               src={this.props.image}
             />
@@ -180,14 +191,15 @@ class Card extends React.Component {
           className="card-type-set-row justify-content-around px-1 m-0 flex-grow-1 flex-shrink-5"
           style={
             {
-              "font-size": "1vh",
+              "font-size": "1.5vh",
               "flex-basis": "1vh",
+              "max-height": "1.5vh"
             }
           }
         >
           {/* Card type */}
           <Col
-            className="card-type-col d-flex flex-grow-10 flex-shrink-1 px-0 h-100 mh-100 mw-100 w-100 text-left"
+            className="card-type-col d-flex flex-grow-10 flex-shrink-1 align-items-center px-0 h-100 mh-100 mw-100 w-100 text-left
             style={
               {
                 "flex-basis": "50%",
@@ -198,26 +210,33 @@ class Card extends React.Component {
             <p
               style={
                 {
-                  "text-overflow": "hidden"
+
+                  "text-overflow": "hidden",
                 }
               }
-              className="card-type w-100 mw-100 mb-0 text-left text-nowrap"
+              className="card-type w-100 mw-100 mb-0 align-middle text-left text-nowrap"
             >
-              {this.props.type}
+              <small>{this.props.type}</small>
             </p>
           </Col>
           <Col
-            className="flex-shrink-10 flex-grow-1 p-0 m-0"
+            className="flex-shrink-10 set-image-col align-items-baseline flex-grow-1 p-0 m-0 mh-100"
             style={{
-              "flex-basis": "10%"
+              "flex-basis": "10%",
+              "overflow": "hidden",
+
             }}
           >
             {/* Card set image */}
             <Media
               obj
-              className="set-image img-fluid d-block mx-auto mh-100"
+
+              className="set-image img-fluid d-block mx-auto align-self-baseline"
               alt="Set Image"
               src={this.props.set}
+              style={{
+                "max-height": "100%"
+              }}
             />
           </Col>
         </Row>
@@ -225,22 +244,22 @@ class Card extends React.Component {
 
         {/* Card text */}
         <Row
-          className="card-text-row px-1 m-0 flex-grow-1 flex-shrink-1"
+          className="card-text-row px-1 m-0 align-items-stretch flex-grow-1 flex-shrink-10"
           style={
             {
-              "font-size": "1.5vh",
               "flex-basis": "2vh",
+              "max-height": "5vh"
             }
           }
         >
           <Col
             xs="12"
-            className="card-text-col d-flex mh-100 h-100 m-0 p-0"
+            className="card-text-col d-flex align-items-stretch mh-100 h-100 m-0 p-0"
           >
             <a
               tabIndex="0"
               type="button"
-              className="btn btn-sm btn-danger card-text m-0 p-0 text-left text-wrap mb-0"
+              className="btn btn-sm btn-danger card-text m-0 p-0 align-middle text-left text-wrap mb-0"
               data-toggle="popover"
               data-trigger="focus"
               title={this.props.name}
@@ -248,12 +267,14 @@ class Card extends React.Component {
               id="Popover"
               style={
                 {
-                  "text-overflow": "hidden",
+                  "font-size": "1.5vh",
+                  "text-overflow": "ellipsis",
                   "overflow": "hidden",
+                  "max-height": "100%"
                 }
               }
             >
-              Card Text
+              <small>{this.props.text}</small>
             </a>
           </Col>
         </Row>
@@ -264,10 +285,11 @@ class Card extends React.Component {
           className="card-power-toughness-row d-inline-flex mx-0 px-1 justify-content-between flex-grow-1 flex-shrink-0"
           style={
             {
-              "flex-basis": "10%",
               "overflow": "hidden",
               "font-size": "1.5vh",
-              "flex-basis": "2vh",
+              "flex-basis": "1vh",
+              "max-height": "2vh",
+              "min-height": "0"
             }
           }
         >
@@ -281,7 +303,7 @@ class Card extends React.Component {
             className="card-power-toughness-col px-0 d-flex flex-shrink-0 flex-grow-2 justify-content-end"
           >
             <p
-              className="card-power-toughness float-right m-0 text-right text-nowrap"
+              className="card-power-toughness float-right m-0 font-weight-bold align-middle text-right text-nowrap"
               style={
                 {
                   "text-overflow": "hidden",
@@ -290,7 +312,7 @@ class Card extends React.Component {
               }
             >
               {/* Don't forget to add the divider when inputing power and toughness */}
-              {this.props.power}{this.props.divider}{this.props.toughness}
+              <small>{this.props.power}{this.props.divider}{this.props.toughness}</small>
             </p>
           </Col>
         </Row>
