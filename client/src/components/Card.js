@@ -172,7 +172,7 @@ class Card extends React.Component {
           >
             <Media
               obj
-              className="card-art-image img-fluid d-block mx-auto h-100 mh-100"
+              className="card-art-image img-fluid d-block mx-auto h-100 mh-100 w-100 mw-100"
               alt="Card Art"
               src={this.props.image}
             />
@@ -186,15 +186,15 @@ class Card extends React.Component {
           className="card-type-set-row justify-content-around px-1 m-0 flex-grow-1 flex-shrink-5"
           style={
             {
-              "font-size": "1.1vh",
+              "font-size": "1.5vh",
               "flex-basis": "1vh",
-              "max-height": "1.3vh"
+              "max-height": "1.5vh"
             }
           }
         >
           {/* Card type */}
           <Col
-            className="card-type-col d-flex flex-grow-10 flex-shrink-1 align-items-middle px-0 h-100 mh-100 mw-100 w-100 text-left"
+            className="card-type-col d-flex flex-grow-10 flex-shrink-1 align-items-center px-0 h-100 mh-100 mw-100 w-100 text-left"
             style={
               {
                 "flex-basis": "50%",
@@ -205,7 +205,7 @@ class Card extends React.Component {
             <p
               style={
                 {
-                  "text-overflow": "hidden"
+                  "text-overflow": "hidden",
                 }
               }
               className="card-type w-100 mw-100 mb-0 align-middle text-left text-nowrap"
@@ -214,7 +214,7 @@ class Card extends React.Component {
             </p>
           </Col>
           <Col
-            className="flex-shrink-10 set-image-col align-items-stretch flex-grow-1 p-0 m-0 mh-100"
+            className="flex-shrink-10 set-image-col align-items-baseline flex-grow-1 p-0 m-0 mh-100"
             style={{
               "flex-basis": "10%",
               "overflow": "hidden",
@@ -223,9 +223,12 @@ class Card extends React.Component {
             {/* Card set image */}
             <Media
               obj
-              className="set-image img-fluid d-block mx-auto h-100 mh-100"
+              className="set-image img-fluid d-block mx-auto align-self-baseline"
               alt="Set Image"
               src={this.props.set}
+              style={{
+                "max-height": "100%"
+              }}
             />
           </Col>
         </Row>
