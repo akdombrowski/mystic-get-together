@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/mystic-get-together/precache-manifest.b0b5df040401ac3657563d6b9d32af9d.js"
+  "/mystic-get-together/precache-manifest.15e4fcfd69994820d9d5f8dd3511fbbf.js"
 );
 
 workbox.clientsClaim();
