@@ -35,19 +35,6 @@ class GameArea extends Component {
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
     this.toggleCard = this.toggleCard.bind(this);
-
-    sdk.listenToPlayer("player1", this.player1Callback)
-    sdk.listenToZone("player1", "zone1", this.player1ZoneCallback)
-  }
-
-  player1Callback(docData) {
-    const { gameActions } = this.props;
-    gameActions.updatePlayer("player1", docData)
-  }
-
-  player1ZoneCallback(docData) {
-    const { gameActions } = this.props;
-    gameActions.updateZone("player1", "zone1", docData)
   }
 
   toggleCard(card) {

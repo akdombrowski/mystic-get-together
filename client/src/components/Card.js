@@ -311,40 +311,6 @@ class Card extends React.Component {
           </Col>
         </Row>
 
-
-        {/* Power and toughness if creature */}
-        <Row
-          className="card-power-toughness-row m-0 px-1 flex-grow-5 flex-shrink-3"
-          style={
-            {
-              "max-height": "15%"
-            }
-          }
-        >
-          <Col
-            xs="12"
-            className="card-power-toughness-col px-1 d-flex flex-shrink-1 flex-grow-2"
-            style={
-              {
-                "max-height": "2vh"
-              }
-            }
-          >
-            <p
-              className="card-power-toughness text-right text-nowrap"
-              style={
-                {
-                  "font-size": "45%",
-                  "text-overflow": "hidden"
-                }
-              }
-            >
-              {/* Don't forget to add the divider when inputting power and toughness */}
-              {this.props.power}{this.props.divider}{this.props.toughness}
-            </p>
-          </Col>
-        </Row>
-
       </Container>
     );
   }
