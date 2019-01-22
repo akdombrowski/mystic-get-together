@@ -1,6 +1,7 @@
 {
   "name": "mystic-get-together",
   "version": "0.1.0",
+  "homepage": "https://akdombrowski.github.io/mystic-get-together/",
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
@@ -21,7 +22,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "deploy": "firebase deploy",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -35,7 +37,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "homepage": "https://akdombrowski.github.io/mystic-get-together/",
     "eslint": "^5.8.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
