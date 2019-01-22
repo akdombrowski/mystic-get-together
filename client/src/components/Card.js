@@ -129,7 +129,8 @@ class Card extends React.Component {
               id="Popover"
               style={{
                 textOverflow: "ellipsis",
-                overflow: "hidden"
+                overflow: "hidden",
+                border: "none"
               }}
             >
               {this.props.name}
@@ -156,7 +157,8 @@ class Card extends React.Component {
               style={{
                 "text-overflow": "ellipsis",
                 overflow: "hidden",
-                "font-size": ".75vw"
+                "font-size": ".75vw",
+                border: "none"
               }}
             >
               {this.props.cost}
@@ -214,7 +216,8 @@ class Card extends React.Component {
               value={this.props.type}
               style={{
                 "text-overflow": "ellipsis",
-                overflow: "hidden"
+                overflow: "hidden",
+                border: "none"
               }}
             >
               {this.props.type}
@@ -267,7 +270,9 @@ class Card extends React.Component {
               id="Popover"
               style={{
                 "text-overflow": "ellipsis",
-                overflow: "hidden"
+                overflow: "hidden",
+                // border: "none"
+                borderWidth: "thin"
               }}
             >
               {this.props.text}
@@ -299,7 +304,8 @@ class Card extends React.Component {
               id="Popover"
               style={{
                 "text-overflow": "ellipsis",
-                overflow: "hidden"
+                overflow: "hidden",
+                border: "none"
               }}
             >
               {/* Don't forget to add the divider when inputing power and toughness */}

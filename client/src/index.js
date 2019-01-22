@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import configureStore from './redux/store';
 
 import GameContainer from './containers/GameContainer';
+import Hand from './components/Hand';
 import LandingPage from './components/LandingPage';
 import * as serviceWorker from './serviceWorker';
 
@@ -18,12 +19,13 @@ const app = () => (
 );
 
 ReactDOM.render(
-  <Router>
-    <div>
-      <Route exact path="/landingPage" component={LandingPage} />
-      <Route exact path="/" component={app} />
-    </div>
-  </Router>,
+  // <Router>
+  //   <div>
+  //     <Route exact path="/landingPage" component={LandingPage} />
+  //     <Route exact path="/" component={app} />
+  //   </div>
+  // </Router>,
+  <Hand></Hand>,
   document.getElementById('root')
 );
 
