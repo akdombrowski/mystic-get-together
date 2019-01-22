@@ -1,7 +1,7 @@
 {
   "name": "mystic-get-together",
   "version": "0.1.0",
-  "homepage": "https://akdombrowski.github.io/mystic-get-together/",
+  "homepage": "https://akdombrowski.github.io/mystic-get-together",
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
