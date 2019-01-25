@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import * as sdk from '../js-sdk/sdk';
+import * as sdk from "../js-sdk/sdk";
 
 import "../styles/GameArea.css";
 import Card from "./Card.js";
 import "../styles/Card.css";
 
-import NavigationBar from './NavigationBar';
-import Sidebar from './Sidebar';
+import NavigationBar from "./NavigationBar";
+import Sidebar from "./Sidebar";
 
 import {
   Jumbotron,
@@ -39,10 +39,9 @@ class GameArea extends Component {
 
   toggleCard(card) {
     if (card["state.tapped"]) {
-      sdk.untap(card)
-    }
-    else {
-      sdk.tap(card)
+      sdk.untap(card);
+    } else {
+      sdk.tap(card);
     }
   }
 
@@ -187,7 +186,11 @@ class GameArea extends Component {
               className="cards-rows-container mh-100 h-100 p-0 m-0"
             >
               {/* Top row of battlefield */}
-              <Row className="top-cards-row mh-50 h-50 mw-100 w-100 p-0 m-0 border">
+              <Row className="top-cards-row mh-50 h-50 mw-100 w-100 p-0 m-0 border"
+              style={{
+                overflowY: "auto",
+                overflowX: "hidden"
+              }}>
                 {/* Main area for cards */}
                 <Col
                   xs="12"
@@ -197,33 +200,30 @@ class GameArea extends Component {
                     {this.state.top_row.map(cardInfo => {
                       return (
                         <Col
-                          xs="2"
+                          xs="4"
                           style={{
                             "min-width": "80px",
                             "max-height": "50%"
                           }}
-                          className="no-gutters"
+                          className="no-gutters px-1"
                         >
-                          <Col
-                            xs="11"
-                            className="mh-100 h-100 no-gutters"
-                          >
-                            <Card
-                              name={cardInfo[0]}
-                              cost={cardInfo[1]}
-                              image={cardInfo[2]}
-                              type={cardInfo[3]}
-                              set={cardInfo[4]}
-                              text={cardInfo[5]}
-                              power={cardInfo[6]}
-                              divider={cardInfo[6] ? "/" : ""}
-                              toughness={cardInfo[7]}
-                            />
+                          <Col fluid className="no-gutters mh-100 h-100">
+                            <Col fluid className="no-gutters mh-100 h-100">
+                              <Col xs="11" className="mh-100 h-100 no-gutters">
+                                <Card
+                                  name={cardInfo[0]}
+                                  cost={cardInfo[1]}
+                                  image={cardInfo[2]}
+                                  type={cardInfo[3]}
+                                  set={cardInfo[4]}
+                                  text={cardInfo[5]}
+                                  power={cardInfo[6]}
+                                  divider={cardInfo[6] ? "/" : ""}
+                                  toughness={cardInfo[7]}
+                                />
+                              </Col>
+                            </Col>
                           </Col>
-                          <Col
-                            xs="1"
-                            className="mh-100 h-100 no-gutters"
-                          />
                         </Col>
                       );
                     })}
@@ -237,7 +237,7 @@ class GameArea extends Component {
                   xs="12"
                   className="battlefield-bottom d-inline-flex flex-wrap justify-content-start card-row card-row-top m-0 p-0"
                 >
-                <>
+                  <>
                     {this.state.top_row.map(cardInfo => {
                       return (
                         <Col
@@ -248,10 +248,7 @@ class GameArea extends Component {
                           }}
                           className="no-gutters"
                         >
-                          <Col
-                            xs="11"
-                            className="mh-100 h-100 no-gutters"
-                          >
+                          <Col xs="11" className="mh-100 h-100 no-gutters">
                             <Card
                               name={cardInfo[0]}
                               cost={cardInfo[1]}
@@ -264,15 +261,12 @@ class GameArea extends Component {
                               toughness={cardInfo[7]}
                             />
                           </Col>
-                          <Col
-                            xs="1"
-                            className="mh-100 h-100 no-gutters"
-                          />
+                          <Col xs="1" className="mh-100 h-100 no-gutters" />
                         </Col>
                       );
                     })}
                   </>
-                  </Col>
+                </Col>
               </Row>
             </Container>
           </Col>
