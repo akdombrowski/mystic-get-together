@@ -5,12 +5,7 @@ import "../styles/Card.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
 import $ from "jquery";
 
-import {
-  Container,
-  Row,
-  Col,
-  Media
-} from 'reactstrap';
+import { Container, Row, Col, Media } from "reactstrap";
 
 class Card extends React.Component {
   constructor(props) {
@@ -112,10 +107,7 @@ class Card extends React.Component {
           }}
         >
           {/* Card name */}
-          <Col
-            xs="7"
-            className="card-name-col p-0 m-0 justify-content-start"
-          >
+          <Col xs="7" className="card-name-col p-0 m-0 justify-content-start">
             <button
               tabIndex="0"
               type="button"
@@ -285,7 +277,7 @@ class Card extends React.Component {
             overflow: "hidden",
             flexBasis: "1.4vw",
             "font-size": ".75vw",
-            "max-height": "1.5vw",
+            "max-height": "1.5vw"
           }}
         >
           <Col className="card-power-toughness-col px-0 d-flex flex-shrink-0 flex-grow-2 justify-content-end">
@@ -315,7 +307,6 @@ class Card extends React.Component {
             </button>
           </Col>
         </Row>
-
       </Container>
     );
   }
