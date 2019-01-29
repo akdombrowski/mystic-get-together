@@ -29,12 +29,35 @@ class GameArea extends Component {
       player: "Anthony",
       life: 0,
       top_row: [],
-      bottom_row: []
+      bottom_row: [],
+      tap: false
     };
 
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
     this.toggleCard = this.toggleCard.bind(this);
+    this.tap = this.tap.bind(this);
+    // this.untap = this.untap.bind(this);
+  }
+
+  tap(index) {
+    if (this.state.tap) {
+      document.getElementById("card" + index).style.transform = "rotate(0)";
+      console.log("untap rotate(0)");
+      this.setState(state => {
+        return {
+          tap: false
+        };
+      });
+    } else {
+      document.getElementById("card" + index).style.transform = "rotate(90deg)";
+      console.log("tap rotate(90)");
+      this.setState(state => {
+        return {
+          tap: true
+        };
+      });
+    }
   }
 
   toggleCard(card) {
@@ -186,30 +209,45 @@ class GameArea extends Component {
               className="cards-rows-container mh-100 h-100 p-0 m-0"
             >
               {/* Top row of battlefield */}
-              <Row className="top-cards-row mh-50 h-50 mw-100 w-100 p-0 m-0 border"
-              style={{
-                overflowY: "auto",
-                overflowX: "hidden"
-              }}>
+              <Row
+                className="top-cards-row mh-50 h-50 mw-100 w-100 p-0 m-0 border"
+                style={{
+                  overflowY: "auto",
+                  overflowX: "hidden"
+                }}
+              >
                 {/* Main area for cards */}
                 <Col
                   xs="12"
                   className="top-cards-row-col d-flex flex-wrap justify-content-start flex-shrink-1 mh-100 h-100 mw-100 w-100 p-0 m-0"
                 >
                   <>
-                    {this.state.top_row.map(cardInfo => {
+                    {this.state.top_row.map((cardInfo, index) => {
                       return (
                         <Col
                           xs="4"
                           style={{
-                            "min-width": "80px",
-                            "max-height": "50%"
+                            "min-width": "1vw",
+                            "max-height": "20vw"
                           }}
                           className="no-gutters px-1"
                         >
-                          <Col fluid className="no-gutters mh-100 h-100">
-                            <Col fluid className="no-gutters mh-100 h-100">
-                              <Col xs="11" className="mh-100 h-100 no-gutters">
+                          <Col
+                            fluid
+                            className="card-wrapper-2 no-gutters mh-100 h-100"
+                          >
+                            <Col
+                              fluid
+                              className="card-wrapper-1 no-gutters d-flex flex-row flex-wrap mh-100 h-100"
+                            >
+                              <Col
+                                xs="12"
+                                className="card-wrapper mh-100 no-gutters"
+                                style={{
+                                  whiteSpace: "nowrap"
+                                }}
+                                id={"card" + index}
+                              >
                                 <Card
                                   name={cardInfo[0]}
                                   cost={cardInfo[1]}
@@ -220,6 +258,13 @@ class GameArea extends Component {
                                   power={cardInfo[6]}
                                   divider={cardInfo[6] ? "/" : ""}
                                   toughness={cardInfo[7]}
+                                />
+                              </Col>
+                              <Col xs="12" className="button-wrapper mh-100">
+                                <Button
+                                  outline
+                                  size="small"
+                                  onClick={state => this.tap(index)}
                                 />
                               </Col>
                             </Col>
