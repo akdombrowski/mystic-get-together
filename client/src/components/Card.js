@@ -5,7 +5,7 @@ import "../styles/Card.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
 import $ from "jquery";
 
-import { Container, Row, Col, Media } from "reactstrap";
+import { Button, Container, Row, Col, Media } from "reactstrap";
 
 class Card extends React.Component {
   constructor(props) {
@@ -108,9 +108,9 @@ class Card extends React.Component {
         >
           {/* Card name */}
           <Col xs="7" className="card-name-col p-0 m-0 justify-content-start">
-            <button
+            <Button
               tabIndex="0"
-              type="button"
+              type="Button"
               color="link"
               size="sm"
               className="card-name-pop text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-left text-nowrap mh-100 h-100 mw-100 w-100"
@@ -126,7 +126,7 @@ class Card extends React.Component {
               }}
             >
               {this.props.name}
-            </button>
+            </Button>
           </Col>
 
           {/* Mana cost */}
@@ -134,9 +134,9 @@ class Card extends React.Component {
             xs="5"
             className="card-mana-cost-col p-0 m-0 justify-content-end"
           >
-            <button
+            <Button
               tabIndex="0"
-              type="button"
+              type="Button"
               color="link"
               size="sm"
               block
@@ -153,7 +153,7 @@ class Card extends React.Component {
               }}
             >
               {this.props.cost}
-            </button>
+            </Button>
           </Col>
         </Row>
         {/* Image row with a col wrapper to control size of image */}
@@ -167,12 +167,30 @@ class Card extends React.Component {
           }}
         >
           <Col xs="12" className="card-art-col p-0 mh-100">
-            <Media
-              obj
-              className="card-art-image img-fluid d-block mx-auto h-100 mh-100 w-100 mw-100"
-              alt="Card Art"
-              src={this.props.image}
-            />
+            <Button
+              tabIndex="0"
+              type="Button"
+              color="link"
+              size="sm"
+              block
+              className="card-cost-pop text-dark font-weight-bold bg-transparent m-0 p-0 justify-end align-start text-right text-nowrap mh-100 h-100 w-100 mw-100"
+              data-toggle="popover"
+              data-trigger="focus"
+              data-content="tap"
+              id="Popover"
+              style={{
+                "text-overflow": "ellipsis",
+                overflow: "hidden",
+                "font-size": ".75vw"
+              }}
+            >
+              <Media
+                obj
+                className="card-art-image img-fluid d-block mx-auto h-100 mh-100 w-100 mw-100"
+                alt="Card Art"
+                src={this.props.image}
+              />
+            </Button>
           </Col>
         </Row>
 
@@ -193,9 +211,9 @@ class Card extends React.Component {
               overflow: "hidden"
             }}
           >
-            <button
+            <Button
               tabIndex="0"
-              type="button"
+              type="Button"
               color="link"
               block
               size="sm"
@@ -212,7 +230,7 @@ class Card extends React.Component {
               }}
             >
               {this.props.type}
-            </button>
+            </Button>
           </Col>
           <Col
             className="flex-shrink-10 set-image-col align-items-baseline flex-grow-1 p-0 m-0 mh-100"
@@ -247,9 +265,9 @@ class Card extends React.Component {
             xs="12"
             className="card-text-col d-flex align-items-stretch mh-100 h-100 m-0 p-0"
           >
-            <button
+            <Button
               tabIndex="0"
-              type="button"
+              type="Button"
               color="link"
               block
               size="sm"
@@ -266,7 +284,7 @@ class Card extends React.Component {
               }}
             >
               {this.props.text}
-            </button>
+            </Button>
           </Col>
         </Row>
 
@@ -281,9 +299,9 @@ class Card extends React.Component {
           }}
         >
           <Col className="card-power-toughness-col px-0 d-flex flex-shrink-0 flex-grow-2 justify-content-end">
-            <button
+            <Button
               tabIndex="0"
-              type="button"
+              type="Button"
               color="link"
               block
               size="sm"
@@ -304,7 +322,7 @@ class Card extends React.Component {
               {this.props.divider}
               {this.props.toughness}
               {String()}
-            </button>
+            </Button>
           </Col>
         </Row>
       </Container>
