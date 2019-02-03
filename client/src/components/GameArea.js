@@ -128,7 +128,7 @@ class GameArea extends Component {
         <Row
           className="top-bar-row-wrapper p-0 m-0 d-flex flex-row flex-grow-1 flex-shrink-1"
           style={{
-            "flex-basis": "10%",
+            flexBasis: "10%",
             overflow: "auto"
           }}
         >
@@ -136,7 +136,7 @@ class GameArea extends Component {
             xs="10"
             className="p-0 m-0"
             style={{
-              "flex-basis": "100%"
+              flexBasis: "100%"
             }}
           >
             <NavigationBar life={this.state.life} active="battlefield" />
@@ -204,13 +204,10 @@ class GameArea extends Component {
             className="battlefield-col p-0 m-0 flex-grow-1 flex-shrink-1 flex-wrap"
           >
             {/* Battlefield area. Battlefield is split into two rows. Top and bottom. */}
-            <Container
-              fluid
-              className="cards-rows-container mh-100 h-100 p-0 m-0"
-            >
+            <Container fluid className="cards-rows-container p-0 m-0">
               {/* Top row of battlefield */}
               <Row
-                className="top-cards-row mh-50 h-50 mw-100 w-100 p-0 m-0 border"
+                className="top-cards-row p-0 m-0 border"
                 style={{
                   overflowY: "auto",
                   overflowX: "hidden"
@@ -233,14 +230,11 @@ class GameArea extends Component {
                           className="no-gutters px-1"
                           id={"col" + index}
                         >
-                          <Col className="card-wrapper-2 no-gutters mh-100 h-100">
-                            <Col className="card-wrapper-1 no-gutters d-flex flex-row flex-wrap mh-100 h-100">
+                          <Col className="card-wrapper-2 no-gutters">
+                            <Col className="card-wrapper-1 no-gutters d-flex flex-row flex-wrap">
                               <Col
                                 xs="12"
-                                className="card-wrapper mh-100 no-gutters"
-                                style={{
-                                  whiteSpace: "nowrap"
-                                }}
+                                className="card-wrapper no-gutters"
                                 id={"card" + index}
                               >
                                 <Card
@@ -253,13 +247,6 @@ class GameArea extends Component {
                                   power={cardInfo[6]}
                                   divider={cardInfo[6] ? "/" : ""}
                                   toughness={cardInfo[7]}
-                                />
-                              </Col>
-                              <Col xs="12" className="button-wrapper mh-100">
-                                <Button
-                                  outline
-                                  size="small"
-                                  onClick={state => this.tap(index)}
                                 />
                               </Col>
                             </Col>
