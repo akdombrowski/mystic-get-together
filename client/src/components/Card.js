@@ -8,32 +8,35 @@ import $ from "jquery";
 import { Button, Container, Row, Col, Media } from "reactstrap";
 
 class Card extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      popoverOpen: false
-    };
-    this.toggle = this.toggle.bind(this);
-    this.isCreature = this.isCreature.bind(this);
-  }
-
   url =
     "https://api.scryfall.com/cards/1d9d8732-9ff2-42e4-bdfc-723cb6a76969?format=json";
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      popoverOpen: false,
+      isTapped: false
+    };
+    this.toggle = this.toggle.bind(this);
+    this.isCreature = this.isCreature.bind(this);
+    this.tap = this.tap.bind(this);
+    this.cardArtRef = React.createRef();
+  }
+
   static parseScryfallData(data) {
     if (data) {
-      var jsonObj = data;
-      var name = jsonObj.name;
-      var mana_cost = jsonObj.mana_cost;
-      var image_uri_art_crop = jsonObj.image_uris.art_crop;
-      var type_line = jsonObj.type_line;
-      var set = jsonObj.set;
-      var set_image =
+      const jsonObj = data;
+      const name = jsonObj.name;
+      const mana_cost = jsonObj.mana_cost;
+      const image_uri_art_crop = jsonObj.image_uris.art_crop;
+      const type_line = jsonObj.type_line;
+      const set = jsonObj.set;
+      const set_image =
         "https://img.scryfall.com/sets/" + set + ".svg?1545627600";
-      var oracle_text = jsonObj.oracle_text;
-      var power = jsonObj.power;
-      var toughness = jsonObj.toughness;
-      var cardInfo = [
+      const oracle_text = jsonObj.oracle_text;
+      const power = jsonObj.power;
+      const toughness = jsonObj.toughness;
+      const cardInfo = [
         name,
         mana_cost,
         image_uri_art_crop,
@@ -77,15 +80,40 @@ class Card extends React.Component {
 
   isCreature() {
     if (this.props.power) {
-      console.log("has power");
       this.setState(state => ({
         isCreature: String(this.props.power + "/" + this.props.toughness)
       }));
     } else {
-      console.log("doesn't have power");
       this.setState(state => ({
         isCreature: "non-creature"
       }));
+    }
+  }
+
+  tap() {
+    const node = this.cardArtRef.current;
+    if (!node) {
+      console.log(this.cardArtRef);
+      return;
+    }
+    if (this.state.tap) {
+      console.log(node);
+      node.style.transform = "rotate(0)";
+      console.log("untap rotate(0)");
+      this.setState(state => {
+        return {
+          tap: false
+        };
+      });
+    } else {
+      console.log(node);
+      node.style.transform = "rotate(90deg)";
+      console.log("tap rotate(90)");
+      this.setState(state => {
+        return {
+          tap: true
+        };
+      });
     }
   }
 
@@ -95,15 +123,15 @@ class Card extends React.Component {
         fluid
         className="card-container d-flex flex-column justify-content-center mh-100 h-100 mw-100 w-100 border rounded p-0 m-0"
         style={{
-          "overflow-y": "auto",
-          "overflow-x": "hidden"
+          overflowY: "auto",
+          overflowX: "hidden"
         }}
       >
         {/* Card name and mana cost row */}
         <Row
           className="card-name-cost-row d-inline-flex flex-nowrap mw-100 no-gutters flex-nowrap justify-content-between flex-grow-0 flex-shrink-0"
           style={{
-            "font-size": "1vw"
+            fontSize: "1vw"
           }}
         >
           {/* Card name */}
@@ -147,9 +175,9 @@ class Card extends React.Component {
               data-content={this.props.cost}
               id="Popover"
               style={{
-                "text-overflow": "ellipsis",
+                textOverflow: "ellipsis",
                 overflow: "hidden",
-                "font-size": ".75vw"
+                fontSize: ".75vw"
               }}
             >
               {this.props.cost}
@@ -166,7 +194,11 @@ class Card extends React.Component {
             overflow: "hidden"
           }}
         >
-          <Col xs="12" className="card-art-col p-0 mh-100">
+          <Col
+            xs="12"
+            className="card-art-col p-0 mh-100"
+            ref={this.cardArtRef}
+          >
             <Button
               tabIndex="0"
               type="Button"
@@ -174,18 +206,16 @@ class Card extends React.Component {
               size="sm"
               block
               className="card-cost-pop text-dark font-weight-bold bg-transparent m-0 p-0 justify-end align-start text-right text-nowrap mh-100 h-100 w-100 mw-100"
-              data-toggle="popover"
               data-trigger="focus"
               data-content="tap"
-              id="Popover"
+              onClick={this.tap}
               style={{
-                "text-overflow": "ellipsis",
+                textOverflow: "ellipsis",
                 overflow: "hidden",
-                "font-size": ".75vw"
+                fontSize: ".75vw"
               }}
             >
               <Media
-                obj
                 className="card-art-image img-fluid d-block mx-auto h-100 mh-100 w-100 mw-100"
                 alt="Card Art"
                 src={this.props.image}
@@ -198,9 +228,9 @@ class Card extends React.Component {
         <Row
           className="card-type-set-row justify-content-around no-gutters flex-grow-1 flex-shrink-5"
           style={{
-            "font-size": ".5vw",
+            fontSize: ".5vw",
             "flex-basis": "1vw",
-            "max-height": "1vw"
+            maxHeight: "1vw"
           }}
         >
           {/* Card type */}
@@ -224,7 +254,7 @@ class Card extends React.Component {
               id="Popover"
               value={this.props.type}
               style={{
-                "text-overflow": "ellipsis",
+                textOverflow: "ellipsis",
                 overflow: "hidden",
                 border: "none"
               }}
@@ -241,12 +271,11 @@ class Card extends React.Component {
           >
             {/* Card set image */}
             <Media
-              obj
               className="set-image img-fluid d-block mx-auto align-self-baseline"
               alt="Set Image"
               src={this.props.set}
               style={{
-                "max-height": "100%"
+                maxHeight: "100%"
               }}
             />
           </Col>
@@ -256,9 +285,9 @@ class Card extends React.Component {
         <Row
           className="card-text-row no-gutters align-items-stretch flex-grow-1 flex-shrink-10"
           style={{
-            "font-size": ".75vw",
+            fontSize: ".75vw",
             "flex-basis": "1.5vw",
-            "max-height": "1.5vw"
+            maxHeight: "1.5vw"
           }}
         >
           <Col
@@ -278,7 +307,7 @@ class Card extends React.Component {
               data-content={this.props.text}
               id="Popover"
               style={{
-                "text-overflow": "ellipsis",
+                textOverflow: "ellipsis",
                 overflow: "hidden",
                 borderWidth: "thin"
               }}
@@ -294,8 +323,8 @@ class Card extends React.Component {
           style={{
             overflow: "hidden",
             flexBasis: "1.4vw",
-            "font-size": ".75vw",
-            "max-height": "1.5vw"
+            fontSize: ".75vw",
+            maxHeight: "1.5vw"
           }}
         >
           <Col className="card-power-toughness-col px-0 d-flex flex-shrink-0 flex-grow-2 justify-content-end">
@@ -312,7 +341,7 @@ class Card extends React.Component {
               data-content={this.state.isCreature}
               id="Popover"
               style={{
-                "text-overflow": "ellipsis",
+                textOverflow: "ellipsis",
                 overflow: "hidden",
                 border: "none"
               }}

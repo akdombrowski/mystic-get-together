@@ -145,7 +145,7 @@ class GameArea extends Component {
           <Col xs="2" className="flex-grow-1 flex-shrink-1">
             <Row>
               <Col className="d-inline-flex mh-100 h-100">
-                <p5>Life: </p5> <p5 className="">{this.state.life}</p5>
+                <p>Life: </p> <p className="">{this.state.life}</p>
               </Col>
               <Col xs="12" className="d-inline-flex">
                 <ButtonGroup className="d-flex" size="sm">
@@ -227,19 +227,14 @@ class GameArea extends Component {
                         <Col
                           xs="4"
                           style={{
-                            "min-width": "1vw",
-                            "max-height": "20vw"
+                            minWidth: "1vw",
+                            maxHeight: "20vw"
                           }}
                           className="no-gutters px-1"
+                          id={"col" + index}
                         >
-                          <Col
-                            fluid
-                            className="card-wrapper-2 no-gutters mh-100 h-100"
-                          >
-                            <Col
-                              fluid
-                              className="card-wrapper-1 no-gutters d-flex flex-row flex-wrap mh-100 h-100"
-                            >
+                          <Col className="card-wrapper-2 no-gutters mh-100 h-100">
+                            <Col className="card-wrapper-1 no-gutters d-flex flex-row flex-wrap mh-100 h-100">
                               <Col
                                 xs="12"
                                 className="card-wrapper mh-100 no-gutters"
@@ -288,8 +283,8 @@ class GameArea extends Component {
                         <Col
                           xs="2"
                           style={{
-                            "min-width": "80px",
-                            "max-height": "50%"
+                            minWidth: "80px",
+                            maxHeight: "50%"
                           }}
                           className="no-gutters"
                         >
