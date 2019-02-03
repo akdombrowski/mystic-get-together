@@ -39,10 +39,10 @@ class GameArea extends Component {
 
   toggleCard(card) {
     if (card["state.tapped"]) {
-      sdk.untap(card)
+      sdk.untap(this.props.gameState.gameId, card)
     }
     else {
-      sdk.tap(card)
+      sdk.tap(this.props.gameState.gameId, card)
     }
   }
 
