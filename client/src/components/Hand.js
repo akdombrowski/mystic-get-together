@@ -89,8 +89,10 @@ class Hand extends React.Component {
   render() {
     return (
       <Container fluid className="hand-parent-container mh-100 h-100">
-        <Row className="hand-container flex-nowrap"
-        style={{maxHeight: "100%"}}>
+        <Row
+          className="hand-container flex-nowrap"
+          style={{ maxHeight: "100%" }}
+        >
           {this.state.cards.map(cardInfo => {
             return (
               <Col

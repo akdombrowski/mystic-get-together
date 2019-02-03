@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import * as sdk from '../js-sdk/sdk';
+import * as sdk from "../js-sdk/sdk";
 
 import "../styles/GameArea.css";
 import Card from "./Card.js";
 import "../styles/Card.css";
 
-import NavigationBar from './NavigationBar';
-import Sidebar from './Sidebar';
+import NavigationBar from "./NavigationBar";
+import Sidebar from "./Sidebar";
 
 import {
   Jumbotron,
@@ -29,20 +29,42 @@ class GameArea extends Component {
       player: "Anthony",
       life: 0,
       top_row: [],
-      bottom_row: []
+      bottom_row: [],
+      tap: false
     };
 
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
     this.toggleCard = this.toggleCard.bind(this);
+    this.tap = this.tap.bind(this);
+    // this.untap = this.untap.bind(this);
+  }
+
+  tap(index) {
+    if (this.state.tap) {
+      document.getElementById("card" + index).style.transform = "rotate(0)";
+      console.log("untap rotate(0)");
+      this.setState(state => {
+        return {
+          tap: false
+        };
+      });
+    } else {
+      document.getElementById("card" + index).style.transform = "rotate(90deg)";
+      console.log("tap rotate(90)");
+      this.setState(state => {
+        return {
+          tap: true
+        };
+      });
+    }
   }
 
   toggleCard(card) {
     if (card["state.tapped"]) {
-      sdk.untap(this.props.gameState.gameId, card)
-    }
-    else {
-      sdk.tap(this.props.gameState.gameId, card)
+      sdk.untap(card);
+    } else {
+      sdk.tap(card);
     }
   }
 
@@ -123,7 +145,7 @@ class GameArea extends Component {
           <Col xs="2" className="flex-grow-1 flex-shrink-1">
             <Row>
               <Col className="d-inline-flex mh-100 h-100">
-                <p5>Life: </p5> <p5 className="">{this.state.life}</p5>
+                <p>Life: </p> <p className="">{this.state.life}</p>
               </Col>
               <Col xs="12" className="d-inline-flex">
                 <ButtonGroup className="d-flex" size="sm">
@@ -187,43 +209,61 @@ class GameArea extends Component {
               className="cards-rows-container mh-100 h-100 p-0 m-0"
             >
               {/* Top row of battlefield */}
-              <Row className="top-cards-row mh-50 h-50 mw-100 w-100 p-0 m-0 border">
+              <Row
+                className="top-cards-row mh-50 h-50 mw-100 w-100 p-0 m-0 border"
+                style={{
+                  overflowY: "auto",
+                  overflowX: "hidden"
+                }}
+              >
                 {/* Main area for cards */}
                 <Col
                   xs="12"
                   className="top-cards-row-col d-flex flex-wrap justify-content-start flex-shrink-1 mh-100 h-100 mw-100 w-100 p-0 m-0"
                 >
                   <>
-                    {this.state.top_row.map(cardInfo => {
+                    {this.state.top_row.map((cardInfo, index) => {
                       return (
                         <Col
-                          xs="2"
+                          xs="4"
                           style={{
-                            "min-width": "80px",
-                            "max-height": "50%"
+                            minWidth: "1vw",
+                            maxHeight: "20vw"
                           }}
-                          className="no-gutters"
+                          className="no-gutters px-1"
+                          id={"col" + index}
                         >
-                          <Col
-                            xs="11"
-                            className="mh-100 h-100 no-gutters"
-                          >
-                            <Card
-                              name={cardInfo[0]}
-                              cost={cardInfo[1]}
-                              image={cardInfo[2]}
-                              type={cardInfo[3]}
-                              set={cardInfo[4]}
-                              text={cardInfo[5]}
-                              power={cardInfo[6]}
-                              divider={cardInfo[6] ? "/" : ""}
-                              toughness={cardInfo[7]}
-                            />
+                          <Col className="card-wrapper-2 no-gutters mh-100 h-100">
+                            <Col className="card-wrapper-1 no-gutters d-flex flex-row flex-wrap mh-100 h-100">
+                              <Col
+                                xs="12"
+                                className="card-wrapper mh-100 no-gutters"
+                                style={{
+                                  whiteSpace: "nowrap"
+                                }}
+                                id={"card" + index}
+                              >
+                                <Card
+                                  name={cardInfo[0]}
+                                  cost={cardInfo[1]}
+                                  image={cardInfo[2]}
+                                  type={cardInfo[3]}
+                                  set={cardInfo[4]}
+                                  text={cardInfo[5]}
+                                  power={cardInfo[6]}
+                                  divider={cardInfo[6] ? "/" : ""}
+                                  toughness={cardInfo[7]}
+                                />
+                              </Col>
+                              <Col xs="12" className="button-wrapper mh-100">
+                                <Button
+                                  outline
+                                  size="small"
+                                  onClick={state => this.tap(index)}
+                                />
+                              </Col>
+                            </Col>
                           </Col>
-                          <Col
-                            xs="1"
-                            className="mh-100 h-100 no-gutters"
-                          />
                         </Col>
                       );
                     })}
@@ -237,21 +277,18 @@ class GameArea extends Component {
                   xs="12"
                   className="battlefield-bottom d-inline-flex flex-wrap justify-content-start card-row card-row-top m-0 p-0"
                 >
-                <>
+                  <>
                     {this.state.top_row.map(cardInfo => {
                       return (
                         <Col
                           xs="2"
                           style={{
-                            "min-width": "80px",
-                            "max-height": "50%"
+                            minWidth: "80px",
+                            maxHeight: "50%"
                           }}
                           className="no-gutters"
                         >
-                          <Col
-                            xs="11"
-                            className="mh-100 h-100 no-gutters"
-                          >
+                          <Col xs="11" className="mh-100 h-100 no-gutters">
                             <Card
                               name={cardInfo[0]}
                               cost={cardInfo[1]}
@@ -264,15 +301,12 @@ class GameArea extends Component {
                               toughness={cardInfo[7]}
                             />
                           </Col>
-                          <Col
-                            xs="1"
-                            className="mh-100 h-100 no-gutters"
-                          />
+                          <Col xs="1" className="mh-100 h-100 no-gutters" />
                         </Col>
                       );
                     })}
                   </>
-                  </Col>
+                </Col>
               </Row>
             </Container>
           </Col>
