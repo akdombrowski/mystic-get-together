@@ -201,13 +201,13 @@ class GameArea extends Component {
         >
           <Col
             xs="10"
-            className="battlefield-col p-0 m-0 flex-grow-1 flex-shrink-1 flex-wrap"
+            className="battlefield-col p-0 m-0 flex-grow-1 flex-shrink-1 flex-wrap mh-100 h-100"
           >
             {/* Battlefield area. Battlefield is split into two rows. Top and bottom. */}
-            <Container fluid className="cards-rows-container p-0 m-0">
+            <Container fluid className="cards-rows-container p-0 m-0 mh-100 h-100">
               {/* Top row of battlefield */}
               <Row
-                className="top-cards-row p-0 m-0 border"
+                className="top-cards-row h-50 mh-50 p-0 m-0 border"
                 style={{
                   overflowY: "auto",
                   overflowX: "hidden"
@@ -230,8 +230,8 @@ class GameArea extends Component {
                           className="no-gutters px-1"
                           id={"col" + index}
                         >
-                          <Col className="card-wrapper-2 no-gutters">
-                            <Col className="card-wrapper-1 no-gutters d-flex flex-row flex-wrap">
+                          <Col className="card-wrapper-2 no-gutters mh-100 h-100">
+                            <Col className="card-wrapper-1 no-gutters d-flex flex-row flex-wrap mh-100 h-100">
                               <Col
                                 xs="12"
                                 className="card-wrapper no-gutters"
@@ -259,7 +259,7 @@ class GameArea extends Component {
               </Row>
 
               {/* Bottom row of cards */}
-              <Row className="bottom-cards-row mh-50 h-50 mw-100 w-100 p-0 m-0 border">
+              <Row className="bottom-cards-row mh-100 h-100 mw-100 w-100 p-0 m-0 border">
                 <Col
                   xs="12"
                   className="battlefield-bottom d-inline-flex flex-wrap justify-content-start card-row card-row-top m-0 p-0"
