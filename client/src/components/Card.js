@@ -94,7 +94,6 @@ class Card extends React.Component {
     }
   }
 
-  
   render() {
     return (
       <Container
@@ -108,13 +107,13 @@ class Card extends React.Component {
         {/* Card name and mana cost row */}
         <Row
           noGutters
-          className="card-name-cost-row d-inline-flex mh-100 mw-100 flex-nowrap justify-content-between flex-grow-1 px-1 flex-shrink-5"
+          className="card-name-cost-row d-inline-flex mh-100 mw-100 flex-nowrap justify-content-between flex-grow-1 flex-shrink-5"
           style={{
             flexBasis: "5%"
           }}
         >
           {/* Card name */}
-          <Col xs="7" className="card-name-col p-0 m-0 justify-content-start">
+          <Col xs="7" className="card-name-col m-0 justify-content-start">
             <Button
               tabIndex="0"
               type="Button"
@@ -147,7 +146,7 @@ class Card extends React.Component {
           {/* Mana cost */}
           <Col
             xs="5"
-            className="card-mana-cost-col p-0 m-0 justify-content-end"
+            className="card-mana-cost-col m-0 justify-content-end"
           >
             <Button
               tabIndex="0"
@@ -180,13 +179,14 @@ class Card extends React.Component {
 
         {/* Image row with a col wrapper to control size of image */}
         <Row
-          className="card-art-row justify-content-center px-3 no-gutters d-flex flex-grow-5 flex-shrink-1"
+          noGutters
+          className="card-art-row justify-content-center px-3  d-flex flex-grow-5 flex-shrink-1"
           style={{
             flexBasis: "60%",
             overflow: "hidden"
           }}
         >
-          <Col xs="12" className="card-art-col d-flex no-gutters">
+          <Col xs="12" className="card-art-col d-flex">
             <Button
               tabIndex="0"
               type="Button"
@@ -213,14 +213,15 @@ class Card extends React.Component {
 
         {/* Row for type and set logo */}
         <Row
-          className="card-type-set-row justify-content-around no-gutters flex-grow-1 flex-shrink-5"
+          noGutters
+          className="card-type-set-row justify-content-around  flex-grow-1 flex-shrink-5"
           style={{
             flexBasis: "5%",
             maxHeight: "1vw"
           }}
         >
           {/* Card type */}
-          <Col className="card-type-col d-flex flex-grow-1 flex-shrink-1 align-items-center px-0 text-left">
+          <Col className="card-type-col d-flex flex-grow-1 flex-shrink-1 align-items-center text-left">
             <Button
               tabIndex="0"
               type="Button"
@@ -251,7 +252,7 @@ class Card extends React.Component {
             </Button>
           </Col>
           <Col
-            className="flex-shrink-10 set-image-col align-items-baseline d-flex justify-content-end flex-grow-1 p-0 m-0"
+            className="flex-shrink-10 set-image-col align-items-baseline d-flex justify-content-end flex-grow-1 m-0"
             style={{
               "flex-basis": "10%",
               overflow: "hidden"
@@ -272,7 +273,8 @@ class Card extends React.Component {
 
         {/* Card text */}
         <Row
-          className="card-text-row no-gutters align-items-stretch flex-grow-1 flex-shrink-1"
+          noGutters
+          className="card-text-row  align-items-stretch flex-grow-1 flex-shrink-1"
           style={{
             fontSize: ".75vw",
             flexBasis: "10%",
@@ -281,7 +283,7 @@ class Card extends React.Component {
         >
           <Col
             xs="12"
-            className="card-text-col d-flex align-items-stretch mh-100 h-100 m-0 p-0"
+            className="card-text-col d-flex align-items-stretch mh-100 h-100 m-0"
           >
             <Button
               tabIndex="0"
@@ -315,7 +317,8 @@ class Card extends React.Component {
 
         {/* Power and toughness if creature */}
         <Row
-          className="card-power-toughness-row d-inline-flex no-gutters justify-content-between flex-grow-1 flex-shrink-1"
+          noGutters
+          className="card-power-toughness-row d-inline-flex  justify-content-between flex-grow-1 flex-shrink-1"
           style={{
             overflow: "hidden",
             flexBasis: "1.4vw",
@@ -323,7 +326,7 @@ class Card extends React.Component {
             maxHeight: "1.5vw"
           }}
         >
-          <Col className="card-power-toughness-col px-0 d-flex flex-shrink-0 flex-grow-2 justify-content-end">
+          <Col className="card-power-toughness-col d-flex flex-shrink-0 flex-grow-2 justify-content-end">
             <Button
               tabIndex="0"
               type="Button"
