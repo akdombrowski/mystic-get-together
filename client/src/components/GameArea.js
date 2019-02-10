@@ -217,6 +217,7 @@ class GameArea extends Component {
             >
               {/* Top row of battlefield */}
               <Row
+                noGutters
                 className="top-cards-row h-50 p-0 m-0 border"
                 style={{
                   overflowY: "auto",
@@ -232,22 +233,22 @@ class GameArea extends Component {
                     {this.state.top_row.map((cardInfo, index) => {
                       return (
                         <Col
-                          xs="3"
+                          xs="4"
                           style={{
                             minWidth: "1vw",
                             width: "20vw",
-                            maxHeight: "20vw"
+                            // maxHeight: "30vw"
                           }}
-                          className="no-gutters p-3"
+                          className="p-3"
                         >
-                          <Col className="card-wrapper-2 no-gutters mh-100 h-100">
+                          <Col className="card-wrapper-2 mh-100 h-100 p-0">
                             <Col
-                              className="card-wrapper-1 no-gutters d-flex flex-row flex-wrap mh-100 h-100"
+                              className="card-wrapper-1 d-flex flex-row flex-wrap mh-100 h-100 p-0"
                               id={"col" + index}
                             >
                               <Col
                                 xs="12"
-                                className="card-wrapper no-gutters"
+                                className="card-wrapper p-0"
                                 id={"card" + index}
                                 style={{
                                   transformOrigin: "50% 50% -1vw"

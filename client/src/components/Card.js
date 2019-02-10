@@ -101,7 +101,8 @@ class Card extends React.Component {
         id="cardContainer"
         className="card-container d-flex flex-column justify-content-center border rounded mh-100 h-100 p-0 m-0"
         style={{
-          overflow: "hidden"
+          overflow: "hidden",
+          lineHeight: "1vh"
         }}
       >
         {/* Card name and mana cost row */}
@@ -109,7 +110,7 @@ class Card extends React.Component {
           noGutters
           className="card-name-cost-row d-inline-flex mh-100 mw-100 flex-nowrap justify-content-between flex-grow-1 flex-shrink-5"
           style={{
-            flexBasis: "5%"
+            flexBasis: ".85vw"
           }}
         >
           {/* Card name */}
@@ -119,8 +120,8 @@ class Card extends React.Component {
               type="Button"
               color="link"
               size="sm"
-              block
-              className="card-name-pop text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-left text-nowrap"
+              inlineBlock
+              className="card-name-pop inline-block text-dark font-weight-bold bg-transparent mh-100 m-0 p-0 align-top text-left text-nowrap"
               data-toggle="popover"
               data-trigger="focus"
               title={this.props.name}
@@ -129,7 +130,7 @@ class Card extends React.Component {
               style={{
                 overflow: "hidden",
                 border: "none",
-                lineHeight: "1"
+                lineHeight: ".8vw"
               }}
             >
               <span
@@ -162,7 +163,7 @@ class Card extends React.Component {
               id="Popover"
               style={{
                 overflow: "hidden",
-                lineHeight: "1"
+                lineHeight: "1vw"
               }}
             >
               <span
@@ -177,12 +178,12 @@ class Card extends React.Component {
           </Col>
         </Row>
 
-        {/* Image row with a col wrapper to control size of image */}
+        {/* Card Art Image row */}
         <Row
           noGutters
-          className="card-art-row justify-content-center px-3  d-flex flex-grow-5 flex-shrink-1"
+          className="card-art-row justify-content-center px-1 d-flex flex-grow-5 flex-shrink-1"
           style={{
-            flexBasis: "60%",
+            flexBasis: "80%",
             overflow: "hidden"
           }}
         >
@@ -197,15 +198,13 @@ class Card extends React.Component {
               data-content="tap"
               onClick={this.handleImageClick}
               style={{
-                overflow: "hidden",
-                lineHeight: "1"
+                lineHeight: "inherit"
               }}
             >
               <Media
                 className="card-art-image img-fluid d-inline-flex mx-auto"
                 alt="Card Art"
                 src={this.props.image}
-                style={{ maxWidth: "15vw" }}
               />
             </Button>
           </Col>
@@ -237,14 +236,14 @@ class Card extends React.Component {
               style={{
                 textOverflow: "hidden",
                 border: "none",
-                lineHeight: "1"
+                lineHeight: "inherit"
               }}
             >
               <span
                 className="d-flex flex-start"
                 style={{
                   textOverflow: "ellipsis",
-                  fontSize: ".75vw"
+                  fontSize: ".5vw"
                 }}
               >
                 {this.props.type}
@@ -265,7 +264,7 @@ class Card extends React.Component {
               alt="Set Image"
               src={this.props.set}
               style={{
-                maxWidth: "1.25vw"
+                maxWidth: "1vw"
               }}
             />
           </Col>
@@ -299,7 +298,7 @@ class Card extends React.Component {
               id="Popover"
               style={{
                 borderWidth: "thin",
-                lineHeight: "1"
+                lineHeight: "inherit"
               }}
             >
               <span
@@ -343,7 +342,7 @@ class Card extends React.Component {
                 textOverflow: "ellipsis",
                 overflow: "hidden",
                 border: "none",
-                lineHeight: "1"
+                lineHeight: "inherit"
               }}
             >
               {/* Don't forget to add the divider when inputing power and toughness */}
