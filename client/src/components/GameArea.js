@@ -37,21 +37,28 @@ class GameArea extends Component {
     this.decrement = this.decrement.bind(this);
     this.toggleCard = this.toggleCard.bind(this);
     this.tap = this.tap.bind(this);
-    // this.untap = this.untap.bind(this);
   }
 
-  tap(index) {
+  tap(colID, cardID) {
+    const cardWrapperH = document.getElementById(colID).offsetHeight;
+    const cardWrapperW = document.getElementById(colID).offsetWidth;
     if (this.state.tap) {
-      document.getElementById("card" + index).style.transform = "rotate(0)";
-      console.log("untap rotate(0)");
+      document.getElementById(cardID).style.maxHeight = cardWrapperH + "px";
+      document.getElementById(cardID).style.height = cardWrapperH + "px";
+      document.getElementById(cardID).style.maxWidth = cardWrapperW + "px";
+      document.getElementById(cardID).style.width = cardWrapperW + "px";
+      document.getElementById(cardID).style.transform = "rotate(0)";
       this.setState(state => {
         return {
           tap: false
         };
       });
     } else {
-      document.getElementById("card" + index).style.transform = "rotate(90deg)";
-      console.log("tap rotate(90)");
+      document.getElementById(cardID).style.maxHeight = cardWrapperW + "px";
+      document.getElementById(cardID).style.height = cardWrapperW + "px";
+      document.getElementById(cardID).style.maxWidth = cardWrapperH + "px";
+      document.getElementById(cardID).style.width = cardWrapperH + "px";
+      document.getElementById(cardID).style.transform = "rotate(90deg)";
       this.setState(state => {
         return {
           tap: true
@@ -204,10 +211,13 @@ class GameArea extends Component {
             className="battlefield-col p-0 m-0 flex-grow-1 flex-shrink-1 flex-wrap mh-100 h-100"
           >
             {/* Battlefield area. Battlefield is split into two rows. Top and bottom. */}
-            <Container fluid className="cards-rows-container p-0 m-0 mh-100 h-100">
+            <Container
+              fluid
+              className="cards-rows-container p-0 m-0 mh-100 h-100"
+            >
               {/* Top row of battlefield */}
               <Row
-                className="top-cards-row h-50 mh-50 p-0 m-0 border"
+                className="top-cards-row h-50 p-0 m-0 border"
                 style={{
                   overflowY: "auto",
                   overflowX: "hidden"
@@ -222,20 +232,26 @@ class GameArea extends Component {
                     {this.state.top_row.map((cardInfo, index) => {
                       return (
                         <Col
-                          xs="4"
+                          xs="3"
                           style={{
                             minWidth: "1vw",
+                            width: "20vw",
                             maxHeight: "20vw"
                           }}
-                          className="no-gutters px-1"
-                          id={"col" + index}
+                          className="no-gutters p-3"
                         >
                           <Col className="card-wrapper-2 no-gutters mh-100 h-100">
-                            <Col className="card-wrapper-1 no-gutters d-flex flex-row flex-wrap mh-100 h-100">
+                            <Col
+                              className="card-wrapper-1 no-gutters d-flex flex-row flex-wrap mh-100 h-100"
+                              id={"col" + index}
+                            >
                               <Col
                                 xs="12"
                                 className="card-wrapper no-gutters"
                                 id={"card" + index}
+                                style={{
+                                  transformOrigin: "50% 50% -1vw"
+                                }}
                               >
                                 <Card
                                   name={cardInfo[0]}
@@ -247,6 +263,9 @@ class GameArea extends Component {
                                   power={cardInfo[6]}
                                   divider={cardInfo[6] ? "/" : ""}
                                   toughness={cardInfo[7]}
+                                  tapAction={this.tap}
+                                  colID={"col" + index}
+                                  cardID={"card" + index}
                                 />
                               </Col>
                             </Col>

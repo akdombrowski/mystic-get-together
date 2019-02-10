@@ -20,8 +20,11 @@ class Card extends React.Component {
     };
     this.toggle = this.toggle.bind(this);
     this.isCreature = this.isCreature.bind(this);
-    this.tap = this.tap.bind(this);
-    this.cardArtRef = React.createRef();
+    this.handleImageClick = this.handleImageClick.bind(this);
+  }
+
+  handleImageClick() {
+    this.props.tapAction(this.props.colID, this.props.cardID);
   }
 
   static parseScryfallData(data) {
@@ -91,308 +94,264 @@ class Card extends React.Component {
     }
   }
 
-  tap() {
-    const node = this.cardArtRef.current;
-    if (node) {
-      const oldHeight = node.offsetHeight;
-      const oldWidth = node.offsetWidth;
-      console.log("old height and width: " + oldHeight + " " + oldWidth);
-      if (this.state.tap) {
-        console.log(node);
-        const oldHeight = node.style.height;
-        const oldWidth = node.style.width;
-        node.style.height = oldWidth;
-        node.style.maxHeight = oldWidth;
-        node.style.width = oldHeight;
-        node.style.maxWidth = oldHeight;
-        node.style.transform = "rotate(0)";
-        console.log("untap rotate(0)");
-        console.log("newheight: " + node.style.maxHeight);
-        this.setState(state => {
-          return {
-            tap: false
-          };
-        });
-      } else {
-        console.log(node);
-        node.style.height = oldWidth;
-        node.style.maxHeight = oldWidth;
-        node.style.width = oldHeight;
-        node.style.maxWidth = oldHeight;
-        node.style.transform = "rotate(90deg)";
-        console.log("tap rotate(90)");
-        console.log("newheight: " + node.style.maxHeight);
-        this.setState(state => {
-          return {
-            tap: true
-          };
-        });
-      }
-    }
-  }
-
+  
   render() {
     return (
-      <div
-      className="mh-100 h-100 d-flex"
-        ref={this.cardArtRef}
-        style={{ overflow: "hidden" }}
+      <Container
+        fluid
+        id="cardContainer"
+        className="card-container d-flex flex-column justify-content-center border rounded mh-100 h-100 p-0 m-0"
+        style={{
+          overflow: "hidden"
+        }}
       >
-        <Container
-          fluid
-          id="cardContainer"
-          className="card-container d-flex flex-column justify-content-center border rounded mh-100 h-100 p-0 m-0"
+        {/* Card name and mana cost row */}
+        <Row
+          noGutters
+          className="card-name-cost-row d-inline-flex mh-100 mw-100 flex-nowrap justify-content-between flex-grow-1 px-1 flex-shrink-5"
           style={{
-            overflow: "hidden",
+            flexBasis: "5%"
           }}
         >
-          {/* Card name and mana cost row */}
-          <Row
-            noGutters
-            className="card-name-cost-row d-inline-flex flex-nowrap justify-content-between flex-grow-1 px-1 flex-shrink-5"
-            style={{
-              flexBasis: "5%"
-            }}
-          >
-            {/* Card name */}
-            <Col xs="7" className="card-name-col p-0 m-0 justify-content-start">
-              <Button
-                tabIndex="0"
-                type="Button"
-                color="link"
-                size="sm"
-                block
-                className="card-name-pop text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-left text-nowrap"
-                data-toggle="popover"
-                data-trigger="focus"
-                title={this.props.name}
-                data-content={this.props.name}
-                id="Popover"
-                style={{
-                  overflow: "hidden",
-                  border: "none",
-                  lineHeight: "1"
-                }}
-              >
-                <span
-                  style={{
-                    textOverflow: "ellipsis",
-                    fontSize: ".75vw"
-                  }}
-                >
-                  {this.props.name}
-                </span>
-              </Button>
-            </Col>
-
-            {/* Mana cost */}
-            <Col
-              xs="5"
-              className="card-mana-cost-col p-0 m-0 justify-content-end"
+          {/* Card name */}
+          <Col xs="7" className="card-name-col p-0 m-0 justify-content-start">
+            <Button
+              tabIndex="0"
+              type="Button"
+              color="link"
+              size="sm"
+              block
+              className="card-name-pop text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-left text-nowrap"
+              data-toggle="popover"
+              data-trigger="focus"
+              title={this.props.name}
+              data-content={this.props.name}
+              id="Popover"
+              style={{
+                overflow: "hidden",
+                border: "none",
+                lineHeight: "1"
+              }}
             >
-              <Button
-                tabIndex="0"
-                type="Button"
-                color="link"
-                size="sm"
-                block
-                className="card-cost-pop text-dark font-weight-bold bg-transparent p-0 m-0 justify-end align-start text-right text-nowrap"
-                data-toggle="popover"
-                data-trigger="focus"
-                title={this.props.name}
-                data-content={this.props.cost}
-                id="Popover"
+              <span
                 style={{
-                  overflow: "hidden",
-                  lineHeight: "1"
+                  textOverflow: "ellipsis",
+                  fontSize: ".75vw"
                 }}
               >
-                <span
-                  style={{
-                    textOverflow: "ellipsis",
-                    fontSize: ".75vw"
-                  }}
-                >
-                  {this.props.cost}
-                </span>
-              </Button>
-            </Col>
-          </Row>
-          {/* Image row with a col wrapper to control size of image */}
-          <Row
-            className="card-art-row justify-content-center px-3 no-gutters d-flex flex-grow-5 flex-shrink-1"
+                {this.props.name}
+              </span>
+            </Button>
+          </Col>
+
+          {/* Mana cost */}
+          <Col
+            xs="5"
+            className="card-mana-cost-col p-0 m-0 justify-content-end"
+          >
+            <Button
+              tabIndex="0"
+              type="Button"
+              color="link"
+              size="sm"
+              block
+              className="card-cost-pop text-dark font-weight-bold bg-transparent p-0 m-0 justify-end align-start text-right text-nowrap"
+              data-toggle="popover"
+              data-trigger="focus"
+              title={this.props.name}
+              data-content={this.props.cost}
+              id="Popover"
+              style={{
+                overflow: "hidden",
+                lineHeight: "1"
+              }}
+            >
+              <span
+                style={{
+                  textOverflow: "ellipsis",
+                  fontSize: ".75vw"
+                }}
+              >
+                {this.props.cost}
+              </span>
+            </Button>
+          </Col>
+        </Row>
+
+        {/* Image row with a col wrapper to control size of image */}
+        <Row
+          className="card-art-row justify-content-center px-3 no-gutters d-flex flex-grow-5 flex-shrink-1"
+          style={{
+            flexBasis: "60%",
+            overflow: "hidden"
+          }}
+        >
+          <Col xs="12" className="card-art-col d-flex no-gutters">
+            <Button
+              tabIndex="0"
+              type="Button"
+              color="link"
+              size="sm"
+              className="card-art-btn bg-transparent d-flex m-0 p-0 justify-end align-start mh-100 h-100 w-100 mw-100"
+              data-trigger="focus"
+              data-content="tap"
+              onClick={this.handleImageClick}
+              style={{
+                overflow: "hidden",
+                lineHeight: "1"
+              }}
+            >
+              <Media
+                className="card-art-image img-fluid d-inline-flex mx-auto"
+                alt="Card Art"
+                src={this.props.image}
+                style={{ maxWidth: "15vw" }}
+              />
+            </Button>
+          </Col>
+        </Row>
+
+        {/* Row for type and set logo */}
+        <Row
+          className="card-type-set-row justify-content-around no-gutters flex-grow-1 flex-shrink-5"
+          style={{
+            flexBasis: "5%",
+            maxHeight: "1vw"
+          }}
+        >
+          {/* Card type */}
+          <Col className="card-type-col d-flex flex-grow-1 flex-shrink-1 align-items-center px-0 text-left">
+            <Button
+              tabIndex="0"
+              type="Button"
+              color="link"
+              block
+              size="sm"
+              className="card-type-pop text-dark font-weight-bold bg-transparent mh-100 m-0 p-0 align-items-start align-top text-left text-wrap"
+              data-toggle="popover"
+              data-trigger="focus"
+              data-content={this.props.type}
+              id="Popover"
+              value={this.props.type}
+              style={{
+                textOverflow: "hidden",
+                border: "none",
+                lineHeight: "1"
+              }}
+            >
+              <span
+                className="d-flex flex-start"
+                style={{
+                  textOverflow: "ellipsis",
+                  fontSize: ".75vw"
+                }}
+              >
+                {this.props.type}
+              </span>
+            </Button>
+          </Col>
+          <Col
+            className="flex-shrink-10 set-image-col align-items-baseline d-flex justify-content-end flex-grow-1 p-0 m-0"
             style={{
-              flexBasis: "60%",
+              "flex-basis": "10%",
               overflow: "hidden"
             }}
           >
-            <Col xs="12" className="card-art-col d-flex no-gutters">
-              <Button
-                tabIndex="0"
-                type="Button"
-                color="link"
-                size="sm"
-                className="card-art-btn bg-transparent d-flex m-0 p-0 justify-end align-start mh-100 h-100 w-100 mw-100"
-                data-trigger="focus"
-                data-content="tap"
-                onClick={this.tap}
-                style={{
-                  overflow: "hidden",
-                  lineHeight: "1"
-                }}
-              >
-                <Media
-                  className="card-art-image img-fluid d-inline-flex mx-auto"
-                  alt="Card Art"
-                  src={this.props.image}
-                  // style={{ maxWidth: "15vw" }}
-                />
-              </Button>
-            </Col>
-          </Row>
-
-          {/* Row for type and set logo */}
-          <Row
-            className="card-type-set-row justify-content-around no-gutters flex-grow-1 flex-shrink-5"
-            style={{
-              flexBasis: "5%",
-              maxHeight: "1vw"
-            }}
-          >
-            {/* Card type */}
-            <Col className="card-type-col d-flex flex-grow-1 flex-shrink-1 align-items-center px-0 text-left">
-              <Button
-                tabIndex="0"
-                type="Button"
-                color="link"
-                block
-                size="sm"
-                className="card-type-pop text-dark font-weight-bold bg-transparent mh-100 m-0 p-0 align-items-start align-top text-left text-wrap"
-                data-toggle="popover"
-                data-trigger="focus"
-                data-content={this.props.type}
-                id="Popover"
-                value={this.props.type}
-                style={{
-                  textOverflow: "hidden",
-                  border: "none",
-                  lineHeight: "1"
-                }}
-              >
-                <span
-                  className="d-flex flex-start"
-                  style={{
-                    textOverflow: "ellipsis",
-                    fontSize: ".75vw"
-                  }}
-                >
-                  {this.props.type}
-                </span>
-              </Button>
-            </Col>
-            <Col
-              className="flex-shrink-10 set-image-col align-items-baseline d-flex justify-content-end flex-grow-1 p-0 m-0"
+            {/* Card set image */}
+            <Media
+              right
+              className="set-image img-fluid d-inline-flex  mh-100 m-0 pr-1"
+              alt="Set Image"
+              src={this.props.set}
               style={{
-                "flex-basis": "10%",
-                overflow: "hidden"
+                maxWidth: "1.25vw"
+              }}
+            />
+          </Col>
+        </Row>
+
+        {/* Card text */}
+        <Row
+          className="card-text-row no-gutters align-items-stretch flex-grow-1 flex-shrink-1"
+          style={{
+            fontSize: ".75vw",
+            flexBasis: "10%",
+            maxHeight: "1.5vw"
+          }}
+        >
+          <Col
+            xs="12"
+            className="card-text-col d-flex align-items-stretch mh-100 h-100 m-0 p-0"
+          >
+            <Button
+              tabIndex="0"
+              type="Button"
+              color="link"
+              block
+              size="sm"
+              className="card-text-pop text-dark bg-transparent m-0 p-0 align-top text-left text-wrap mh-100 h-100 mw-100 w-100"
+              data-toggle="popover"
+              data-trigger="focus"
+              title={this.props.name}
+              data-content={this.props.text}
+              id="Popover"
+              style={{
+                borderWidth: "thin",
+                lineHeight: "1"
               }}
             >
-              {/* Card set image */}
-              <Media
-              right
-                className="set-image img-fluid d-inline-flex  mh-100 m-0 pr-1"
-                alt="Set Image"
-                src={this.props.set}
-                style={{
-                  maxWidth: "1.5vw"
-                }}
-              />
-            </Col>
-          </Row>
-
-          {/* Card text */}
-          <Row
-            className="card-text-row no-gutters align-items-stretch flex-grow-1 flex-shrink-1"
-            style={{
-              fontSize: ".75vw",
-              flexBasis: "10%",
-              maxHeight: "1.5vw"
-            }}
-          >
-            <Col
-              xs="12"
-              className="card-text-col d-flex align-items-stretch mh-100 h-100 m-0 p-0"
-            >
-              <Button
-                tabIndex="0"
-                type="Button"
-                color="link"
-                block
-                size="sm"
-                className="card-text-pop text-dark bg-transparent m-0 p-0 align-top text-left text-wrap mh-100 h-100 mw-100 w-100"
-                data-toggle="popover"
-                data-trigger="focus"
-                title={this.props.name}
-                data-content={this.props.text}
-                id="Popover"
-                style={{
-                  borderWidth: "thin",
-                  lineHeight: "1"
-                }}
-              >
-                <span
-                  style={{
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    fontSize: "1vw"
-                  }}
-                >
-                  {this.props.text}
-                </span>
-              </Button>
-            </Col>
-          </Row>
-
-          {/* Power and toughness if creature */}
-          <Row
-            className="card-power-toughness-row d-inline-flex no-gutters justify-content-between flex-grow-1 flex-shrink-1"
-            style={{
-              overflow: "hidden",
-              flexBasis: "1.4vw",
-              fontSize: ".75vw",
-              maxHeight: "1.5vw"
-            }}
-          >
-            <Col className="card-power-toughness-col px-0 d-flex flex-shrink-0 flex-grow-2 justify-content-end">
-              <Button
-                tabIndex="0"
-                type="Button"
-                color="link"
-                block
-                size="sm"
-                className="card-power-toughness text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-right text-wrap mh-100 h-100 mw-100 w-100"
-                data-toggle="popover"
-                data-trigger="focus"
-                title={this.props.name}
-                data-content={this.state.isCreature}
-                id="Popover"
+              <span
                 style={{
                   textOverflow: "ellipsis",
-                  overflow: "hidden",
-                  border: "none",
-                  lineHeight: "1"
+                  whiteSpace: "nowrap",
+                  fontSize: "1vw"
                 }}
               >
-                {/* Don't forget to add the divider when inputing power and toughness */}
-                {this.props.power}
-                {this.props.divider}
-                {this.props.toughness}
-                {String()}
-              </Button>
-            </Col>
-          </Row>
-        </Container>
-      </div>
+                {this.props.text}
+              </span>
+            </Button>
+          </Col>
+        </Row>
+
+        {/* Power and toughness if creature */}
+        <Row
+          className="card-power-toughness-row d-inline-flex no-gutters justify-content-between flex-grow-1 flex-shrink-1"
+          style={{
+            overflow: "hidden",
+            flexBasis: "1.4vw",
+            fontSize: ".75vw",
+            maxHeight: "1.5vw"
+          }}
+        >
+          <Col className="card-power-toughness-col px-0 d-flex flex-shrink-0 flex-grow-2 justify-content-end">
+            <Button
+              tabIndex="0"
+              type="Button"
+              color="link"
+              block
+              size="sm"
+              className="card-power-toughness text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-right text-wrap mh-100 h-100 mw-100 w-100"
+              data-toggle="popover"
+              data-trigger="focus"
+              title={this.props.name}
+              data-content={this.state.isCreature}
+              id="Popover"
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                border: "none",
+                lineHeight: "1"
+              }}
+            >
+              {/* Don't forget to add the divider when inputing power and toughness */}
+              {this.props.power}
+              {this.props.divider}
+              {this.props.toughness}
+              {String()}
+            </Button>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }
