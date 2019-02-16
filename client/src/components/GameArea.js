@@ -138,15 +138,15 @@ class GameArea extends Component {
         <Row
           className="top-bar-row-wrapper p-0 m-0 d-flex flex-row flex-grow-1 flex-shrink-1"
           style={{
-            'flex-basis': '10%',
-            overflow: 'auto',
+            flexBasis: "10%",
+            overflow: "auto"
           }}
         >
           <Col
             xs="10"
             className="p-0 m-0"
             style={{
-              'flex-basis': '100%',
+              flexBasis: "100%"
             }}
           >
             <NavigationBar
@@ -221,11 +221,12 @@ class GameArea extends Component {
             {/* Battlefield area. Battlefield is split into two rows. Top and bottom. */}
             <Container
               fluid
-              className="cards-rows-container mh-100 h-100 p-0 m-0"
+              className="cards-rows-container p-0 m-0 mh-100 h-100"
             >
               {/* Top row of battlefield */}
               <Row
-                className="top-cards-row mh-50 h-50 mw-100 w-100 p-0 m-0 border"
+                noGutters
+                className="top-cards-row h-50 p-0 m-0 border"
                 style={{
                   overflowY: "auto",
                   overflowX: "hidden"
@@ -247,14 +248,24 @@ class GameArea extends Component {
                             'min-width': '80px',
                             'max-height': '50%',
                           }}
-                          className="no-gutters px-1"
-                          id={"col" + index}
+                          className="p-3"
                         >
-                          <Col
-                            xs="11"
-                            className="mh-100 h-100 no-gutters"
-                          >
-                            <Card card={card} />
+                          <Col className="card-wrapper-2 mh-100 h-100 p-0">
+                            <Col
+                              className="card-wrapper-1 d-flex flex-row flex-wrap mh-100 h-100 p-0"
+                              id={"col" + index}
+                            >
+                              <Col
+                                xs="12"
+                                className="card-wrapper p-0"
+                                id={"card" + index}
+                                style={{
+                                  transformOrigin: "50% 50% -1vw"
+                                }}
+                              >
+                                <Card card={card} />
+                              </Col>
+                            </Col>
                           </Col>
                         </Col>
                       ))}
@@ -263,7 +274,7 @@ class GameArea extends Component {
               </Row>
 
               {/* Bottom row of cards */}
-              <Row className="bottom-cards-row mh-50 h-50 mw-100 w-100 p-0 m-0 border">
+              <Row className="bottom-cards-row mh-100 h-100 mw-100 w-100 p-0 m-0 border">
                 <Col
                   xs="12"
                   className="battlefield-bottom d-inline-flex flex-wrap justify-content-start card-row card-row-top m-0 p-0"

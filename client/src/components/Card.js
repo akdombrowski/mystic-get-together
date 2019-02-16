@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
+import Axios from "axios";
+import "../styles/Card.css";
 
 import '../styles/Card.css';
 
@@ -43,43 +47,17 @@ class Card extends React.Component {
     }
   }
 
-  tap() {
-    const node = this.cardArtRef.current;
-    if (!node) {
-      console.log(this.cardArtRef);
-      return;
-    }
-    if (this.state.tap) {
-      console.log(node);
-      node.style.transform = "rotate(0)";
-      console.log("untap rotate(0)");
-      this.setState(state => {
-        return {
-          tap: false
-        };
-      });
-    } else {
-      console.log(node);
-      node.style.transform = "rotate(90deg)";
-      console.log("tap rotate(90)");
-      this.setState(state => {
-        return {
-          tap: true
-        };
-      });
-    }
-  }
-
   render() {
     const { card } = this.props;
 
     return (
       <Container
         fluid
-        className="card-container d-flex flex-column justify-content-center mh-100 h-100 mw-100 w-100 border rounded p-0 m-0"
+        id="cardContainer"
+        className="card-container d-flex flex-column justify-content-center border rounded mh-100 h-100 p-0 m-0"
         style={{
-          'overflow-y': 'auto',
-          'overflow-x': 'hidden',
+          overflow: "hidden",
+          lineHeight: "1vh"
         }}
       >
         {/* Card name and mana cost row */}
@@ -207,12 +185,12 @@ class Card extends React.Component {
           >
             {/* Card set image */}
             <Media
-              obj
-              className="set-image img-fluid d-block mx-auto align-self-baseline"
+              right
+              className="set-image img-fluid d-inline-flex  mh-100 m-0 pr-1"
               alt="Set Image"
               src={card.getSetImage()}
               style={{
-                'max-height': '100%',
+                maxWidth: "1vw"
               }}
             />
           </Col>
