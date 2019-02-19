@@ -11,6 +11,7 @@ import {
   Row,
   Col,
   Media,
+  Popover
 } from 'reactstrap';
 import * as sdk from '../js-sdk/sdk';
 
