@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import "../styles/NavigationBar.css";
 
 import {
-  Button,
   Container,
   Navbar,
   NavbarToggler,
