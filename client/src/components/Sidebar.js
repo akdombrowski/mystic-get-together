@@ -1,64 +1,67 @@
-import React, { Component } from "react";
+import _ from 'lodash';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import {
+  Container,
+  Row,
+  Col,
+} from 'reactstrap';
 
-import "../styles/Sidebar.css";
+import SideZone from './SideZone';
+import { Zones } from '../constants';
 
-import { Container, Row, Col } from "reactstrap";
+import '../styles/Sidebar.css';
 
 class Sidebar extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
+    const { cards } = this.props;
+    const exile = _.filter(cards, (card) => _.get(card, 'state.zone') === Zones.EXILE);
+    const graveyard = _.filter(cards, (card) => _.get(card, 'state.zone') === Zones.GRAVEYARD);
+
     return (
       <Container
         fluid
         className="d-flex sidebar-container mh-100 h-100 mw-100 w-100 p-0 m-0"
       >
-        <Row className="justify-start sidebar-row mh-100 h-100 mw-100 w-100 p-0 m-0">
-          {/* Exile */}
-          <Col xs="12" className="border p-1">
+        <Row
+          className="justify-start sidebar-row mh-100 h-100 mw-100 w-100 p-0 m-0"
+        >
+          {/* Hand */}
+          <Col
+            xs="12"
+            className="border p-1"
+          >
             <h6
               className="font-weight-bold text-wrap"
-              style={{
-                fontSize: "50%"
-              }}
+              style={
+                {
+                  'font-size': '50%',
+                }
+              }
             >
               Hand
             </h6>
           </Col>
-
-          {/* Graveyard */}
-          <Col xs="12" className="border p-1">
-            <h6
-              className="font-weight-bold text-wrap"
-              style={{
-                fontSize: "50%"
-              }}
-            >
-              Exile
-            </h6>
-          </Col>
-
-          {/* Hand */}
-          <Col xs="12" className="border p-1">
-            <h6
-              className="font-weight-bold text-wrap"
-              style={{
-                fontSize: "50%"
-              }}
-            >
-              Grave
-            </h6>
-          </Col>
-
+          <SideZone
+            name="Exile"
+            cardList={exile}
+          />
+          <SideZone
+            name="Graveyard"
+            cardList={graveyard}
+          />
           {/* Library */}
-          <Col xs="12" className="border p-1">
+          <Col
+            xs="12"
+            className="border p-1"
+          >
             <h6
               className="font-weight-bold text-wrap"
-              style={{
-                fontSize: "50%"
-              }}
+              style={
+                {
+                  'font-size': '50%',
+                }
+              }
             >
               Library
             </h6>
@@ -68,5 +71,9 @@ class Sidebar extends Component {
     );
   }
 }
+
+Sidebar.propTypes = {
+  cards: PropTypes.array.isRequired,
+};
 
 export default Sidebar;

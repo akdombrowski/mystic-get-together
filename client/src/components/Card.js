@@ -1,12 +1,18 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
-import Axios from "axios";
-import "../styles/Card.css";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import "bootstrap/dist/js/bootstrap.bundle.js";
-import $ from "jquery";
+import '../styles/Card.css';
 
-import { Button, Container, Row, Col, Media } from "reactstrap";
+import 'bootstrap/dist/js/bootstrap.bundle.js';
+
+import {
+  Container,
+  Row,
+  Col,
+  Media,
+} from 'reactstrap';
+import * as sdk from '../js-sdk/sdk';
+
 
 class Card extends React.Component {
   url =
@@ -14,95 +20,40 @@ class Card extends React.Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       popoverOpen: false,
-      isTapped: false
     };
+
     this.toggle = this.toggle.bind(this);
-    this.isCreature = this.isCreature.bind(this);
-    this.handleImageClick = this.handleImageClick.bind(this);
-  }
-
-  handleImageClick() {
-    this.props.tapAction(this.props.colID, this.props.cardID);
-  }
-
-  static parseScryfallData(data) {
-    if (data) {
-      const jsonObj = data;
-      const name = jsonObj.name;
-      const mana_cost = jsonObj.mana_cost;
-      const image_uri_art_crop = jsonObj.image_uris.art_crop;
-      const type_line = jsonObj.type_line;
-      const set = jsonObj.set;
-      const set_image =
-        "https://img.scryfall.com/sets/" + set + ".svg?1545627600";
-      const oracle_text = jsonObj.oracle_text;
-      const power = jsonObj.power;
-      const toughness = jsonObj.toughness;
-      const cardInfo = [
-        name,
-        mana_cost,
-        image_uri_art_crop,
-        type_line,
-        set_image,
-        oracle_text,
-        power,
-        toughness
-      ];
-      return cardInfo;
-    }
-  }
-
-  static async getScryFallCardInfo(url) {
-    const responsePromise = async () => {
-      try {
-        const response = await Axios.get(url);
-        return response.data;
-      } catch (e) {
-        console.error(e);
-        return null;
-      }
-    };
-
-    const data = await responsePromise();
-    return Card.parseScryfallData(data);
+    this.toggleCard = this.toggleCard.bind(this);
   }
 
   toggle() {
     this.setState({
-      popoverOpen: !this.state.popoverOpen
+      popoverOpen: !this.state.popoverOpen,
     });
   }
 
-  componentDidMount() {
-    $(function() {
-      $('[data-toggle="popover"]').popover();
-    });
-    this.isCreature();
-  }
-
-  isCreature() {
-    if (this.props.power) {
-      this.setState(state => ({
-        isCreature: String(this.props.power + "/" + this.props.toughness)
-      }));
+  toggleCard(card) {
+    if (card['state.tapped']) {
+      sdk.untap(card);
     } else {
-      this.setState(state => ({
-        isCreature: "non-creature"
-      }));
+      sdk.tap(card);
     }
   }
 
   render() {
+    const { card } = this.props;
+
     return (
       <Container
         fluid
         id="cardContainer"
         className="card-container d-flex flex-column justify-content-center border rounded mh-100 h-100 p-0 m-0"
         style={{
-          overflow: "hidden",
-          lineHeight: "1vh"
+          'overflow-y': 'auto',
+          'overflow-x': 'hidden',
         }}
       >
         {/* Card name and mana cost row */}
@@ -110,7 +61,7 @@ class Card extends React.Component {
           noGutters
           className="card-name-cost-row d-inline-flex mh-100 mw-100 flex-nowrap justify-content-between flex-grow-1 flex-shrink-5"
           style={{
-            flexBasis: ".85vw"
+            'font-size': '1vw',
           }}
         >
           {/* Card name */}
@@ -124,23 +75,15 @@ class Card extends React.Component {
               className="card-name-pop inline-block text-dark font-weight-bold bg-transparent mh-100 m-0 p-0 align-top text-left text-nowrap"
               data-toggle="popover"
               data-trigger="focus"
-              title={this.props.name}
-              data-content={this.props.name}
+              title={card.getName()}
+              data-content={card.getName()}
               id="Popover"
               style={{
-                overflow: "hidden",
-                border: "none",
-                lineHeight: ".8vw"
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
               }}
             >
-              <span
-                style={{
-                  textOverflow: "ellipsis",
-                  fontSize: ".75vw"
-                }}
-              >
-                {this.props.name}
-              </span>
+              {card.getName()}
             </Button>
           </Col>
 
@@ -158,22 +101,16 @@ class Card extends React.Component {
               className="card-cost-pop text-dark font-weight-bold bg-transparent p-0 m-0 justify-end align-start text-right text-nowrap"
               data-toggle="popover"
               data-trigger="focus"
-              title={this.props.name}
-              data-content={this.props.cost}
+              title={card.getName()}
+              data-content={card.getManaCost()}
               id="Popover"
               style={{
-                overflow: "hidden",
-                lineHeight: "1vw"
+                'text-overflow': 'ellipsis',
+                overflow: 'hidden',
+                'font-size': '.75vw',
               }}
             >
-              <span
-                style={{
-                  textOverflow: "ellipsis",
-                  fontSize: ".75vw"
-                }}
-              >
-                {this.props.cost}
-              </span>
+              {card.getManaCost()}
             </Button>
           </Col>
         </Row>
@@ -183,30 +120,19 @@ class Card extends React.Component {
           noGutters
           className="card-art-row justify-content-center px-1 d-flex flex-grow-5 flex-shrink-1"
           style={{
-            flexBasis: "80%",
-            overflow: "hidden"
+            'flex-basis': '40%',
+            minHeight: '40%',
+            maxHeight: '80%',
+            overflow: 'hidden',
           }}
         >
-          <Col xs="12" className="card-art-col d-flex">
-            <Button
-              tabIndex="0"
-              type="Button"
-              color="link"
-              size="sm"
-              className="card-art-btn bg-transparent d-flex m-0 p-0 justify-end align-start mh-100 h-100 w-100 mw-100"
-              data-trigger="focus"
-              data-content="tap"
-              onClick={this.handleImageClick}
-              style={{
-                lineHeight: "inherit"
-              }}
-            >
-              <Media
-                className="card-art-image img-fluid d-inline-flex mx-auto"
-                alt="Card Art"
-                src={this.props.image}
-              />
-            </Button>
+          <Col xs="12" className="card-art-col p-0 mh-100">
+            <Media
+              obj
+              className="card-art-image img-fluid d-block mx-auto h-100 mh-100 w-100 mw-100"
+              alt="Card Art"
+              src={card.getImage()}
+            />
           </Col>
         </Row>
 
@@ -215,13 +141,20 @@ class Card extends React.Component {
           noGutters
           className="card-type-set-row justify-content-around  flex-grow-1 flex-shrink-5"
           style={{
-            flexBasis: "5%",
-            maxHeight: "1vw"
+            'font-size': '.5vw',
+            'flex-basis': '1vw',
+            'max-height': '1vw',
           }}
         >
           {/* Card type */}
-          <Col className="card-type-col d-flex flex-grow-1 flex-shrink-1 align-items-center text-left">
-            <Button
+          <Col
+            className="card-type-col d-flex flex-grow-10 flex-shrink-1 align-items-center px-0 h-100 mh-100 mw-100 w-100 text-left"
+            style={{
+              'flex-basis': '50%',
+              overflow: 'hidden',
+            }}
+          >
+            <button
               tabIndex="0"
               type="Button"
               color="link"
@@ -230,31 +163,22 @@ class Card extends React.Component {
               className="card-type-pop text-dark font-weight-bold bg-transparent mh-100 m-0 p-0 align-items-start align-top text-left text-wrap"
               data-toggle="popover"
               data-trigger="focus"
-              data-content={this.props.type}
+              data-content={card.getType()}
               id="Popover"
-              value={this.props.type}
+              value={card.getType()}
               style={{
-                textOverflow: "hidden",
-                border: "none",
-                lineHeight: "inherit"
+                'text-overflow': 'ellipsis',
+                overflow: 'hidden',
               }}
             >
-              <span
-                className="d-flex flex-start"
-                style={{
-                  textOverflow: "ellipsis",
-                  fontSize: ".5vw"
-                }}
-              >
-                {this.props.type}
-              </span>
-            </Button>
+              {card.getType()}
+            </button>
           </Col>
           <Col
             className="flex-shrink-10 set-image-col align-items-baseline d-flex justify-content-end flex-grow-1 m-0"
             style={{
-              "flex-basis": "10%",
-              overflow: "hidden"
+              'flex-basis': '10%',
+              overflow: 'hidden',
             }}
           >
             {/* Card set image */}
@@ -262,9 +186,9 @@ class Card extends React.Component {
               right
               className="set-image img-fluid d-inline-flex  mh-100 m-0 pr-1"
               alt="Set Image"
-              src={this.props.set}
+              src={card.getSetImage()}
               style={{
-                maxWidth: "1vw"
+                'max-height': '100%',
               }}
             />
           </Col>
@@ -275,9 +199,9 @@ class Card extends React.Component {
           noGutters
           className="card-text-row  align-items-stretch flex-grow-1 flex-shrink-1"
           style={{
-            fontSize: ".75vw",
-            flexBasis: "10%",
-            maxHeight: "1.5vw"
+            'font-size': '.75vw',
+            'flex-basis': '1.5vw',
+            'max-height': '1.5vw',
           }}
         >
           <Col
@@ -293,23 +217,15 @@ class Card extends React.Component {
               className="card-text-pop text-dark bg-transparent m-0 p-0 align-top text-left text-wrap mh-100 h-100 mw-100 w-100"
               data-toggle="popover"
               data-trigger="focus"
-              title={this.props.name}
-              data-content={this.props.text}
+              title={card.getName()}
+              data-content={card.getCardText()}
               id="Popover"
               style={{
-                borderWidth: "thin",
-                lineHeight: "inherit"
+                'text-overflow': 'ellipsis',
+                overflow: 'hidden',
               }}
             >
-              <span
-                style={{
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  fontSize: "1vw"
-                }}
-              >
-                {this.props.text}
-              </span>
+              {card.getCardText()}
             </Button>
           </Col>
         </Row>
@@ -319,10 +235,10 @@ class Card extends React.Component {
           noGutters
           className="card-power-toughness-row d-inline-flex  justify-content-between flex-grow-1 flex-shrink-1"
           style={{
-            overflow: "hidden",
-            flexBasis: "1.4vw",
-            fontSize: ".75vw",
-            maxHeight: "1.5vw"
+            overflow: 'hidden',
+            flexBasis: '1.4vw',
+            'font-size': '.75vw',
+            'max-height': '1.5vw',
           }}
         >
           <Col className="card-power-toughness-col d-flex flex-shrink-0 flex-grow-2 justify-content-end">
@@ -335,27 +251,59 @@ class Card extends React.Component {
               className="card-power-toughness text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-right text-wrap mh-100 h-100 mw-100 w-100"
               data-toggle="popover"
               data-trigger="focus"
-              title={this.props.name}
-              data-content={this.state.isCreature}
+              title={card.getName()}
+              data-content={card.getType()}
               id="Popover"
               style={{
-                textOverflow: "ellipsis",
-                overflow: "hidden",
-                border: "none",
-                lineHeight: "inherit"
+                'text-overflow': 'ellipsis',
+                overflow: 'hidden',
               }}
             >
-              {/* Don't forget to add the divider when inputing power and toughness */}
-              {this.props.power}
-              {this.props.divider}
-              {this.props.toughness}
+              {card.getPowerToughness()}
               {String()}
             </Button>
+          </Col>
+        </Row>
+
+
+        {/* Power and toughness if creature */}
+        <Row
+          className="card-power-toughness-row m-0 px-1 flex-grow-5 flex-shrink-3"
+          style={
+            {
+              'max-height': '15%',
+            }
+          }
+        >
+          <Col
+            xs="12"
+            className="card-power-toughness-col px-1 d-flex flex-shrink-1 flex-grow-2"
+            style={
+              {
+                'max-height': '2vh',
+              }
+            }
+          >
+            <p
+              className="card-power-toughness text-right text-nowrap"
+              style={
+                {
+                  'font-size': '45%',
+                  'text-overflow': 'hidden',
+                }
+              }
+            >
+              {card.getPowerToughness()}
+            </p>
           </Col>
         </Row>
       </Container>
     );
   }
 }
+
+Card.propTypes = {
+  card: PropTypes.shape({}).isRequired,
+};
 
 export default Card;
