@@ -1,5 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
+<<<<<<< HEAD
+=======
+import "../styles/NavigationBar.css";
+
+>>>>>>> 63cef2972ecbfb36ad7fdf2789a3a406dda062ae
 import {
   Container,
   Navbar,
@@ -13,7 +18,7 @@ import {
   DropdownMenu,
   DropdownItem,
   UncontrolledCollapse
-} from 'reactstrap';
+} from "reactstrap";
 
 class NavigationBar extends Component {
   constructor(props) {
@@ -45,80 +50,40 @@ class NavigationBar extends Component {
     return;
   }
 
-
   render() {
     return (
-      <Container
-        fluid
-        className="h-100 p-0 m-0"
-      >
-
+      <Container fluid className="h-100 p-0 m-0">
         <Navbar
           light
           expand="lg"
           className="bg-light mh-100 h-100 w-100 mw-100 m-0 p-1 justify-content-between"
         >
-          <NavbarToggler
-            className="mh-100 h-100 m-0 p-0"
-            id="toggler"
-          />
-          <NavbarBrand
-            light
-            className="bg-light"
-          >
+          <NavbarToggler className="mh-100 h-100 m-0 p-0" id="toggler" />
+          <NavbarBrand className="bg-light">
             Mystic-The-Get-Together
           </NavbarBrand>
 
-          <UncontrolledCollapse
-            navbar
-            className="pb-1"
-            toggler="#toggler"
-          >
-
-            <Nav
-              className="ml-auto"
-              navbar
-              pills
-              horizontal
-            >
-
+          <UncontrolledCollapse navbar className="pb-1" toggler="#toggler">
+            <Nav className="ml-auto" navbar pills>
               <NavItem>
-                <NavLink
-                  href="/components/"
-                  className={this.isActive("hand")}
-                >
+                <NavLink href="/components/" className={this.isActive("hand")}>
                   Hand
                 </NavLink>
               </NavItem>
 
               <NavItem>
-                <NavLink
-                  href="#"
-                  className={this.isActive("battlefield")}
-                >
+                <NavLink href="#" className={this.isActive("battlefield")}>
                   Battlefield
                 </NavLink>
               </NavItem>
 
-              <UncontrolledDropdown
-                nav
-                inNavbar
-              >
-
-                <DropdownToggle
-                  nav
-                  caret
-                >
+              <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret>
                   Options
-								</DropdownToggle>
+                </DropdownToggle>
 
-                <DropdownMenu
-                  right
-                >
-
-                  <DropdownItem>
-                    Anthony
-									</DropdownItem>
+                <DropdownMenu right>
+                  <DropdownItem>Anthony</DropdownItem>
 
                   <DropdownItem onClick={this.props.handleToggleSidebarClick}>
                     Toggle Sidebar
@@ -128,28 +93,16 @@ class NavigationBar extends Component {
                     Option 1
 									</DropdownItem>
 
-                  <DropdownItem>
-                    Option 2
-									</DropdownItem>
+                  <DropdownItem>Option 2</DropdownItem>
 
-                  <DropdownItem
-                    divider
-                  />
+                  <DropdownItem divider />
 
-                  <DropdownItem>
-                    Reset
-							    </DropdownItem>
-
+                  <DropdownItem>Reset</DropdownItem>
                 </DropdownMenu>
-
               </UncontrolledDropdown>
-
             </Nav>
-
           </UncontrolledCollapse>
-
         </Navbar>
-
       </Container>
     );
   }

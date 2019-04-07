@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
+import Axios from "axios";
+import "../styles/Card.css";
 
 import '../styles/Card.css';
 
@@ -8,7 +12,14 @@ import 'bootstrap/dist/js/bootstrap.bundle.js';
 import * as sdk from '../js-sdk/sdk';
 
 
+<<<<<<< HEAD
 class Card extends Component {
+=======
+class Card extends React.Component {
+  url =
+    "https://api.scryfall.com/cards/1d9d8732-9ff2-42e4-bdfc-723cb6a76969?format=json";
+
+>>>>>>> 63cef2972ecbfb36ad7fdf2789a3a406dda062ae
   constructor(props) {
     super(props);
 
@@ -41,6 +52,7 @@ class Card extends Component {
     const { card } = props;
 
     return (
+<<<<<<< HEAD
       <div
         style={{
           'border-style': 'solid',
@@ -48,6 +60,15 @@ class Card extends Component {
           height: '100%',
           display: 'grid',
           'grid-template-rows': 'repeat(8, 1fr)',
+=======
+      <Container
+        fluid
+        id="cardContainer"
+        className="card-container d-flex flex-column justify-content-center border rounded mh-100 h-100 p-0 m-0"
+        style={{
+          overflow: "hidden",
+          lineHeight: "1vh"
+>>>>>>> 63cef2972ecbfb36ad7fdf2789a3a406dda062ae
         }}
       >
         {/* Card name */}
@@ -132,6 +153,7 @@ class Card extends Component {
               flex: '1',
             }}
           >
+<<<<<<< HEAD
             {card.getManaCost()}
           </div>
         </div>
@@ -139,6 +161,24 @@ class Card extends Component {
         <this.CardImage card={card} />
         {/* Card type and set image */}
         <div
+=======
+            {/* Card set image */}
+            <Media
+              right
+              className="set-image img-fluid d-inline-flex  mh-100 m-0 pr-1"
+              alt="Set Image"
+              src={card.getSetImage()}
+              style={{
+                maxWidth: "1vw"
+              }}
+            />
+          </Col>
+        </Row>
+
+        {/* Card text */}
+        <Row
+          className="card-text-row no-gutters align-items-stretch flex-grow-1 flex-shrink-10"
+>>>>>>> 63cef2972ecbfb36ad7fdf2789a3a406dda062ae
           style={{
             display: 'flex',
           }}

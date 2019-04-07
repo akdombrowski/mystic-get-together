@@ -83,15 +83,15 @@ class GameArea extends Component {
         <Row
           className="top-bar-row-wrapper p-0 m-0 d-flex flex-row flex-grow-1 flex-shrink-1"
           style={{
-            'flex-basis': '10%',
-            overflow: 'auto',
+            flexBasis: "10%",
+            overflow: "auto"
           }}
         >
           <Col
             xs="10"
             className="p-0 m-0"
             style={{
-              'flex-basis': '100%',
+              flexBasis: "100%"
             }}
           >
             <NavigationBar
@@ -163,11 +163,79 @@ class GameArea extends Component {
             xs={battfieldFieldColumnLength}
             className="battlefield-col p-0 m-0 flex-grow-1 flex-shrink-1 flex-wrap"
           >
+<<<<<<< HEAD
             {/* Battlefield area. */}
             <Battlefield
               useStubs={false}
               cards={cards}
             />
+=======
+            {/* Battlefield area. Battlefield is split into two rows. Top and bottom. */}
+            <Container
+              fluid
+              className="cards-rows-container p-0 m-0 mh-100 h-100"
+            >
+              {/* Top row of battlefield */}
+              <Row
+                noGutters
+                className="top-cards-row h-50 p-0 m-0 border"
+                style={{
+                  overflowY: "auto",
+                  overflowX: "hidden"
+                }}
+              >
+                {/* Main area for cards */}
+                <Col
+                  xs="12"
+                  className="top-cards-row-col d-flex flex-wrap justify-content-start flex-shrink-1 mh-100 h-100 mw-100 w-100 p-0 m-0"
+                >
+                  <>
+
+                    {cards
+                      .filter((card) => _.get(card, 'state.zone') === Zones.BATTLEFIELD)
+                      .map((card) => (
+                        <Col
+                          xs="4"
+                          style={{
+                            'min-width': '80px',
+                            'max-height': '50%',
+                          }}
+                          className="p-3"
+                        >
+                          <Col className="card-wrapper-2 mh-100 h-100 p-0">
+                            <Col
+                              className="card-wrapper-1 d-flex flex-row flex-wrap mh-100 h-100 p-0"
+                              id={"col" + index}
+                            >
+                              <Col
+                                xs="12"
+                                className="card-wrapper p-0"
+                                id={"card" + index}
+                                style={{
+                                  transformOrigin: "50% 50% -1vw"
+                                }}
+                              >
+                                <Card card={card} />
+                              </Col>
+                            </Col>
+                          </Col>
+                        </Col>
+                      ))}
+                  </>
+                </Col>
+              </Row>
+
+              {/* Bottom row of cards */}
+              <Row className="bottom-cards-row mh-100 h-100 mw-100 w-100 p-0 m-0 border">
+                <Col
+                  xs="12"
+                  className="battlefield-bottom d-inline-flex flex-wrap justify-content-start card-row card-row-top m-0 p-0"
+                >
+                  {'placeholder text - bottom row'}
+                </Col>
+              </Row>
+            </Container>
+>>>>>>> 63cef2972ecbfb36ad7fdf2789a3a406dda062ae
           </Col>
           {/* Sidebar for exile,graveyard,hand,library  */}
           {!isToggleSidebarOn && (

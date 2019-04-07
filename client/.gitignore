@@ -65,5 +65,10 @@ node_modules/
 # dotenv environment variables file
 .env
 
+<<<<<<< HEAD
 #babel lib ignore
 src/js-sdk-lib/
+=======
+src/index.js
+./package-lock.json
+>>>>>>> 63cef2972ecbfb36ad7fdf2789a3a406dda062ae

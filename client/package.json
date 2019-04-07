@@ -1,6 +1,7 @@
 {
   "name": "mystic-get-together",
   "version": "0.1.0",
+  "homepage": "https://akdombrowski.github.io/mystic-get-together",
   "private": true,
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
@@ -24,7 +25,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "deploy": "firebase deploy",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "react-scripts test",
     "sdk": "babel src/js-sdk/ --out-dir src/js-sdk-lib --presets=@babel/env && jest --testPathPattern=src/js-sdk-lib/",
     "build-sdk": "babel src/js-sdk/ --out-dir src/js-sdk-lib --presets=@babel/env",
@@ -49,6 +51,10 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
+<<<<<<< HEAD
     "jest": "^24.0.0"
+=======
+    "gh-pages": "^2.0.1"
+>>>>>>> 63cef2972ecbfb36ad7fdf2789a3a406dda062ae
   }
 }
