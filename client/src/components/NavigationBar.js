@@ -1,10 +1,5 @@
 import React, { Component } from "react";
 
-<<<<<<< HEAD
-=======
-import "../styles/NavigationBar.css";
-
->>>>>>> 63cef2972ecbfb36ad7fdf2789a3a406dda062ae
 import {
   Container,
   Navbar,
