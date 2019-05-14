@@ -1,14 +1,15 @@
 import * as functions from 'firebase-functions';
-import * as createError from 'http-errors';
 import * as _ from 'lodash';
 import axios from 'axios';
 
 import * as scryfall from './scryfall';
 import * as Util from './util';
+import * as Response from './response';
 import { URL } from 'url';
 
 // TODO not sure how to correctly convert this to an import
 const url = require('url');
+const cors = require('cors')({ origin: true });
 
 // We may wish to have a single method both parses the deck and 
 // populates the scryfall information for the deck editor in the
@@ -56,7 +57,9 @@ export interface Deck {
     // The name of the deck
     name: string,
     // The cards in the deck, where the key is the Scryfall ID
-    cards: any,
+    cards: {
+        [key: string]: IdentifiedCard,
+    },
     // Optional information about the imported deck
     import_info?: {
         // The URI from which the deck was imported
@@ -120,12 +123,18 @@ const parseDeckFromMTGGoldfish = async function(deckId: string): Promise<ParsedD
         });
     } catch (e) {
         console.error('Failed to call WrapAPI: ', e);
-        throw createError(500);
+        throw new Response.FunctionError(
+            Response.Messages.WRAP_API_CALL_FAILURE,
+            Response.Errors.WRAP_API_ERROR,
+        );
     }
 
     if (!response.data.success) {
         console.error('WrapAPI failed to parse deck', response);
-        throw createError(500);
+        throw new Response.FunctionError(
+            Response.Messages.WRAP_API_PARSE_FAILURE,
+            Response.Errors.WRAP_API_ERROR,
+        );
     }
 
     const wrapAPIData = response.data.data;
@@ -137,19 +146,21 @@ const parseDeckFromMTGGoldfish = async function(deckId: string): Promise<ParsedD
             board = Board.COMMAND;
         }
 
-        return {
+        const namedCard: NamedCard = {
             name: card.name,
             qty: card.qty,
             board: board
         };
+        return namedCard;
     })
 
     console.info('Parsed deck: ', parsedDeck);
 
-    return {
+    const value: ParsedDeck = {
         name: deckTitle,
         cards: parsedDeck
     };
+    return value;
 }
 
 /**
@@ -163,12 +174,11 @@ const parseDeck = async function(params: DecklistParseRequest): Promise<ParsedDe
         const deckId = uri.pathname.substring(uri.pathname.lastIndexOf('/') + 1);
         return await parseDeckFromMTGGoldfish(deckId);
     } else {
-        throw createError(400, 'Bad Request', {
-            headers: {
-                'X-Reason': 'The provided deck list URI is unsupported',
-                'X-Allowed-Deck-Lists': 'MTGGoldfish' 
-            }
-        });
+        throw new Response.FunctionError(
+            Response.Messages.UNSUPPORTED_DECKLIST_PROVIDER,
+            Response.Errors.UNSUPPORTED_DECKLIST_PROVIDER,
+            400,
+        );
     }
 }
 
@@ -249,12 +259,11 @@ const parseDeckAndPopulate = async function(params: DecklistParseRequest, ...inc
 /**
  * Import a deck for a user.
  * 
- * @param username The username of the user
+ * @param uid The uid of the user
  * @param request The DecklistParseRequest
  * @returns The ID of the Deck document
  */
-const importDeck = async function(username: string, request: DecklistParseRequest): Promise<string> {
-    const user = await Util.getUser(username);
+const importDeck = async function(uid: string, request: DecklistParseRequest): Promise<string> {
     const populatedDeck = await parseDeckAndPopulate(request, 
         'id', 'qty', 'board', 'set');
     const cards = _.keyBy(populatedDeck.cards, 'id');
@@ -263,11 +272,15 @@ const importDeck = async function(username: string, request: DecklistParseReques
         cards: cards
     };
     try {
+        const user = await Util.getUser(uid);
         const deckRef = await user.ref.collection('Decks').add(deck);
         return deckRef.id;
     } catch (e) {
         console.error('Caught error writing deck', e);
-        throw createError(500);
+        throw new Response.FunctionError(
+            Response.Messages.FIREBASE_ERROR,
+            Response.Errors.FIREBASE_ERROR,
+        );
     }
 }
 
@@ -275,69 +288,91 @@ const importDeck = async function(username: string, request: DecklistParseReques
  * This Function parses a deck list from a deck list provider such as MTGGoldfish.
  */
 export const parseDeckFunction = functions.https.onRequest((request, response) => {
-    if (request.method !== 'POST') {
-        response.status(405)
-            .header('Allow', 'POST')
-            .send('Method Not Allowed');
-        return;
-    }
+    return cors(request, response, () => {
+        if (request.method !== 'POST') {
+            response.status(405)
+                .header('Allow', 'POST')
+                .send('Method Not Allowed');
+            return;
+        }
 
-    const uri = request.body.uri;
+        const uri = request.body.uri;
 
-    if (!uri) {
-        response
-            .status(400)
-            .send('Body must include "uri" attribute targeting deck to import');
-        return;
-    }
+        if (!uri) {
+            const body: Response.MissingRequiredParameterResponse = {
+                message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+                error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+                parameter: 'uri',
+                description: 'The uri of the deck to parse',
+            };
+            response
+                .status(400)
+                .send(body);
+            return;
+        }
 
-    parseDeck({ uri: uri })
-        .then((deck) => {
-            response.send(deck);
-        })
-        .catch((error) => {
-            Util.errorResponseMapper(error, response);
-        });
+        parseDeck({ uri: uri })
+            .then((deck) => {
+                response.send(deck);
+            })
+            .catch((error) => {
+                Util.errorResponseMapper(error, response);
+            });
+    });
 });
 
 /**
  * This Function provides batch scryfall data for a deck.
  */
 export const populateDeckFunction = functions.https.onRequest((request, response) => {
-    if (request.method !== 'POST') {
-        response.status(405)
-            .header('Allow', 'POST')
-            .send('Method Not Allowed');
-        return;
-    }
+    return cors(request, response, () => {
+        if (request.method !== 'POST') {
+            response.status(405)
+                .header('Allow', 'POST')
+                .send('Method Not Allowed');
+            return;
+        }
 
-    const { player, deckId } = request.body;
-    let { include } = request.body;
+        const { uid, deckId } = request.body;
+        let { include } = request.body;
 
-    if (!player) {
-        response
-            .status(400)
-            .send('Body must include "player" attribute denoting import target user\'s name');
-        return;
-    }
-    if (!deckId) {
-        response
-            .status(400)
-            .send('Body must include "deckId" attribute denoting deck to populate');
-        return;
-    }
-    if (!include) {
-        // If not provided, don't filter
-        include = [];
-    }
+        if (!uid) {
+            const body: Response.MissingRequiredParameterResponse = {
+                message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+                error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+                parameter: 'uid',
+                description: 'The uid of the player that owns the target deck.',
+            };
+            response
+                .status(400)
+                .send(body);
+            return;
+        }
+        if (!deckId) {
+            const body: Response.MissingRequiredParameterResponse = {
+                message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+                error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+                parameter: 'deckId',
+                description: 'The id of the deck to populate.',
+            };
+            response
+                .status(400)
+                .send(body);
+            return;
+        }
+        if (!include) {
+            // If not provided, don't filter
+            include = [];
+        }
 
-    populateDeckForUser(player, deckId, ...include)
-        .then((deck) => {
-            response.send(deck);
-        })
-        .catch((error) => {
-            Util.errorResponseMapper(error, response);
-        });
+        populateDeckForUser(uid, deckId, ...include)
+            .then((deck) => {
+                response.send(deck);
+            })
+            .catch((error) => {
+                Util.errorResponseMapper(error, response);
+            });
+    });
 });
 
 /**
@@ -348,35 +383,53 @@ export const populateDeckFunction = functions.https.onRequest((request, response
  * of edits to the deck prior to import, but for our MVP, this does the job.
  */
 export const importDeckFunction = functions.https.onRequest((request, response) => {
-    if (request.method !== 'POST') {
-        response.status(405)
-            .header('Allow', 'POST')
-            .send('Method Not Allowed');
-        return;
-    }
-    
-    const { player, uri } = request.body;
+    return cors(request, response, () => {
+        if (request.method !== 'POST') {
+            response.status(405)
+                .header('Allow', 'POST')
+                .send('Method Not Allowed');
+            return;
+        }
+        
+        const { uid, uri } = request.body;
 
-    if (!player) {
-        response
-            .status(400)
-            .send('Body must include "player" attribute denoting import target user\'s name');
-        return;
-    }
-    if (!uri) {
-        response
-            .status(400)
-            .send('Body must include "uri" attribute denoting deck to parse');
-        return;
-    }
-
-    importDeck(player, { uri: uri })
-        .then((id) => {
+        if (!uid) {
+            const body: Response.MissingRequiredParameterResponse = {
+                message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+                error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+                parameter: 'uid',
+                description: 'The uid of the player that will import the deck.',
+            };
             response
-                .header('X-DeckID', id)
-                .send('Deck imported.');
-        })
-        .catch((error) => {
-            Util.errorResponseMapper(error, response);
-        });
+                .status(400)
+                .send(body);
+            return;
+        }
+        if (!uri) {
+            const body: Response.MissingRequiredParameterResponse = {
+                message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+                error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+                parameter: 'uri',
+                description: 'The uri of the deck to import.',
+            };
+            response
+                .status(400)
+                .send(body);
+            return;
+        }
+
+        importDeck(uid, { uri: uri })
+            .then((id) => {
+                const body: Response.DeckImportedResponse = {
+                    message: Response.Messages.DECK_IMPORTED,
+                    deckId: id,
+                };
+                response
+                    .status(201)
+                    .send(body);
+            })
+            .catch((error) => {
+                Util.errorResponseMapper(error, response);
+            });
+    });
 });

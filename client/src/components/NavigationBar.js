@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import "../styles/NavigationBar.css";
-
 import {
   Container,
   Navbar,
@@ -28,6 +26,10 @@ class NavigationBar extends Component {
       active: "battlefield"
     };
   }
+
+  propTypes: {
+    handleToggleSidebarClick: React.PropTypes.func
+  };
 
   toggle() {
     this.setState({
@@ -77,6 +79,10 @@ class NavigationBar extends Component {
 
                 <DropdownMenu right>
                   <DropdownItem>Anthony</DropdownItem>
+
+                  <DropdownItem onClick={this.props.handleToggleSidebarClick}>
+                    Toggle Sidebar
+                  </DropdownItem>
 
                   <DropdownItem>Option 1</DropdownItem>
 

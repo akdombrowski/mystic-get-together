@@ -1,15 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-
-import * as sdk from "../js-sdk/sdk";
-
-import "../styles/GameArea.css";
-import Card from "./Card.js";
-import "../styles/Card.css";
-
-import NavigationBar from "./NavigationBar";
-import Sidebar from "./Sidebar";
-
 import {
   Jumbotron,
   Container,
@@ -19,60 +9,23 @@ import {
   ButtonGroup
 } from "reactstrap";
 
-class GameArea extends Component {
-  lordyUrl =
-    "https://api.scryfall.com/cards/1d9d8732-9ff2-42e4-bdfc-723cb6a76969?format=json";
+import Battlefield from "./Battlefield";
+import NavigationBar from "./NavigationBar";
+import Sidebar from "./Sidebar";
+import { GameContext } from "../context/gameContext";
 
+import "../styles/Card.css";
+
+class GameArea extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      player: "Anthony",
       life: 0,
-      top_row: [],
-      bottom_row: [],
-      tap: false
+      isToggleSidebarOn: false
     };
 
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
-    this.toggleCard = this.toggleCard.bind(this);
-    this.tap = this.tap.bind(this);
-  }
-
-  tap(colID, cardID) {
-    const cardWrapperH = document.getElementById(colID).offsetHeight;
-    const cardWrapperW = document.getElementById(colID).offsetWidth;
-    if (this.state.tap) {
-      document.getElementById(cardID).style.maxHeight = cardWrapperH + "px";
-      document.getElementById(cardID).style.height = cardWrapperH + "px";
-      document.getElementById(cardID).style.maxWidth = cardWrapperW + "px";
-      document.getElementById(cardID).style.width = cardWrapperW + "px";
-      document.getElementById(cardID).style.transform = "rotate(0)";
-      this.setState(state => {
-        return {
-          tap: false
-        };
-      });
-    } else {
-      document.getElementById(cardID).style.maxHeight = cardWrapperW + "px";
-      document.getElementById(cardID).style.height = cardWrapperW + "px";
-      document.getElementById(cardID).style.maxWidth = cardWrapperH + "px";
-      document.getElementById(cardID).style.width = cardWrapperH + "px";
-      document.getElementById(cardID).style.transform = "rotate(90deg)";
-      this.setState(state => {
-        return {
-          tap: true
-        };
-      });
-    }
-  }
-
-  toggleCard(card) {
-    if (card["state.tapped"]) {
-      sdk.untap(card);
-    } else {
-      sdk.tap(card);
-    }
   }
 
   increment(x) {
@@ -87,46 +40,34 @@ class GameArea extends Component {
     });
   }
 
-  componentDidMount() {
-    this.fetchCard(this.lordyUrl);
-    this.fetchCard(
-      "https://api.scryfall.com/cards/cc61a398-cf16-415b-b3cf-897217dc7cc9?format=json&pretty=true"
-    );
-    this.fetchCard(
-      "https://api.scryfall.com/cards/e16e4f85-9611-4d5f-a7d9-4a5961dd7182?format=json&pretty=true"
-    );
-    this.fetchCard(
-      "https://api.scryfall.com/cards/54a0afaa-f99f-4c7a-9fa1-c6a46dfb2a29?format=json&pretty=true"
-    );
-    this.fetchCard(
-      "https://api.scryfall.com/cards/086a0591-718f-4a33-a5f5-e9265468c3ad?format=json&pretty=true"
-    );
-    this.fetchCard(
-      "https://api.scryfall.com/cards/3ed39bd7-d059-4a44-9f03-0f628dcdb119?format=json&pretty=true"
-    );
-    this.fetchCard(
-      "https://api.scryfall.com/cards/b0e0ef27-3db2-4976-b9db-13e3d7cd795d?format=json&pretty=true"
-    );
-    this.fetchCard(
-      "https://api.scryfall.com/cards/544a06f8-75fe-41b6-81dc-c9a0358f03c5?format=json&pretty=true"
-    );
-    this.fetchCard(
-      "https://api.scryfall.com/cards/06750380-a9a9-4ab4-a03b-d4d35a31132a?format=json&pretty=true"
+  mainTitle() {
+    return (
+      <Jumbotron className="d-none d-sm-flex mh-100 pt-0 pb-0 mb-0">
+        <div className="mh-100">
+          <h6 className="display-5 mh-100">Main Board</h6>
+          <p className="d-none d-sm-flex">View of your battlefield.</p>
+        </div>
+      </Jumbotron>
     );
   }
-  // Fetch a card given it's scryfall api url.
-  async fetchCard(url) {
-    const cardInfo = await Card.getScryFallCardInfo(url);
-    this.setState(state => {
-      var arr = state.top_row.slice();
-      arr.push(cardInfo);
-      return {
-        top_row: arr
-      };
+
+  handleToggleSidebarClick() {
+    this.setState({
+      isToggleSidebarOn: !this.state.isToggleSidebarOn
     });
   }
 
   render() {
+    const { life, isToggleSidebarOn } = this.state;
+    const { cards } = this.context.gameState;
+    const FULL_LENGTH = 12;
+    const SHORTER_LENGTH = 10;
+    const battfieldFieldColumnLength = isToggleSidebarOn
+      ? FULL_LENGTH
+      : SHORTER_LENGTH;
+
+    // console.log(this.context.gameState);
+
     return (
       <Container
         fluid
@@ -135,7 +76,7 @@ class GameArea extends Component {
         <Row
           className="top-bar-row-wrapper p-0 m-0 d-flex flex-row flex-grow-1 flex-shrink-1"
           style={{
-            flexBasis: "10%",
+            "flex-basis": "10%",
             overflow: "auto"
           }}
         >
@@ -143,23 +84,27 @@ class GameArea extends Component {
             xs="10"
             className="p-0 m-0"
             style={{
-              flexBasis: "100%"
+              "flex-basis": "100%"
             }}
           >
-            <NavigationBar life={this.state.life} active="battlefield" />
+            <NavigationBar
+              life={life}
+              active="battlefield"
+              handleToggleSidebarClick={this.handleToggleSidebarClick}
+            />
           </Col>
 
           <Col xs="2" className="flex-grow-1 flex-shrink-1">
             <Row>
               <Col className="d-inline-flex mh-100 h-100">
-                <p>Life: </p> <p className="">{this.state.life}</p>
+                <p5>Life: </p5> <p5 className="">{life}</p5>
               </Col>
               <Col xs="12" className="d-inline-flex">
                 <ButtonGroup className="d-flex" size="sm">
                   <Button
                     outline
                     color="success"
-                    onClick={state => this.increment(1)}
+                    onClick={() => this.increment(1)}
                     type="submit"
                   >
                     +1
@@ -167,7 +112,7 @@ class GameArea extends Component {
                   <Button
                     outline
                     color="warning"
-                    onClick={state => this.decrement(1)}
+                    onClick={() => this.decrement(1)}
                     type="submit"
                     block
                   >
@@ -180,7 +125,7 @@ class GameArea extends Component {
                   <Button
                     outline
                     color="primary"
-                    onClick={state => this.increment(5)}
+                    onClick={() => this.increment(5)}
                     type="submit"
                   >
                     +5
@@ -188,7 +133,7 @@ class GameArea extends Component {
                   <Button
                     outline
                     color="danger"
-                    onClick={state => this.decrement(5)}
+                    onClick={() => this.decrement(5)}
                     type="submit"
                     block
                   >
@@ -207,200 +152,37 @@ class GameArea extends Component {
           }}
         >
           <Col
-            xs="10"
-            className="battlefield-col p-0 m-0 flex-grow-1 flex-shrink-1 flex-wrap mh-100 h-100"
+            xs={battfieldFieldColumnLength}
+            className="battlefield-col p-0 m-0 flex-grow-1 flex-shrink-1 flex-wrap"
           >
-            {/* Battlefield area. Battlefield is split into two rows. Top and bottom. */}
-            <Container
-              fluid
-              className="cards-rows-container p-0 m-0 mh-100 h-100"
-            >
-              {/* Top row of battlefield */}
-              <Row
-                className="top-cards-row h-50 p-0 m-0 border"
-                style={{
-                  overflowY: "auto",
-                  overflowX: "hidden"
-                }}
-              >
-                {/* Main area for cards */}
-                <Col
-                  xs="12"
-                  className="top-cards-row-col d-flex flex-wrap justify-content-start flex-shrink-1 mh-100 h-100 mw-100 w-100 p-0 m-0"
-                >
-                  <>
-                    {this.state.top_row.map((cardInfo, index) => {
-                      return (
-                        <Col
-                          xs="3"
-                          style={{
-                            minWidth: "1vw",
-                            width: "20vw",
-                            maxHeight: "20vw"
-                          }}
-                          className="no-gutters p-3"
-                        >
-                          <Col className="card-wrapper-2 no-gutters mh-100 h-100">
-                            <Col
-                              className="card-wrapper-1 no-gutters d-flex flex-row flex-wrap mh-100 h-100"
-                              id={"col" + index}
-                            >
-                              <Col
-                                xs="12"
-                                className="card-wrapper no-gutters"
-                                id={"card" + index}
-                                style={{
-                                  transformOrigin: "50% 50% -1vw"
-                                }}
-                              >
-                                <Card
-                                  name={cardInfo[0]}
-                                  cost={cardInfo[1]}
-                                  image={cardInfo[2]}
-                                  type={cardInfo[3]}
-                                  set={cardInfo[4]}
-                                  text={cardInfo[5]}
-                                  power={cardInfo[6]}
-                                  divider={cardInfo[6] ? "/" : ""}
-                                  toughness={cardInfo[7]}
-                                  tapAction={this.tap}
-                                  colID={"col" + index}
-                                  cardID={"card" + index}
-                                />
-                              </Col>
-                            </Col>
-                          </Col>
-                        </Col>
-                      );
-                    })}
-                  </>
-                </Col>
-              </Row>
-
-              {/* Bottom row of cards */}
-              <Row className="bottom-cards-row mh-100 h-100 mw-100 w-100 p-0 m-0 border">
-                <Col
-                  xs="12"
-                  className="battlefield-bottom d-inline-flex flex-wrap justify-content-start card-row card-row-top m-0 p-0"
-                >
-                  <>
-                    {this.state.top_row.map(cardInfo => {
-                      return (
-                        <Col
-                          xs="2"
-                          style={{
-                            minWidth: "80px",
-                            maxHeight: "50%"
-                          }}
-                          className="no-gutters"
-                        >
-                          <Col xs="11" className="mh-100 h-100 no-gutters">
-                            <Card
-                              name={cardInfo[0]}
-                              cost={cardInfo[1]}
-                              image={cardInfo[2]}
-                              type={cardInfo[3]}
-                              set={cardInfo[4]}
-                              text={cardInfo[5]}
-                              power={cardInfo[6]}
-                              divider={cardInfo[6] ? "/" : ""}
-                              toughness={cardInfo[7]}
-                            />
-                          </Col>
-                          <Col xs="1" className="mh-100 h-100 no-gutters" />
-                        </Col>
-                      );
-                    })}
-                  </>
-                </Col>
-              </Row>
-            </Container>
+            {/* Battlefield area. */}
+            <Battlefield useStubs={false} cards={cards} />
           </Col>
           {/* Sidebar for exile,graveyard,hand,library  */}
-          <Col xs="2" className="sidebar-col p-0 m-0">
-            <Container
-              fluid
-              className="sidebar-col-container mh-100 h-100 mw-100 w-100 p-0 m-0"
-            >
-              <Row className="sidebar-col-container-row mh-100 h-100 mw-100 w-100 p-0 m-0">
-                <Col className="side-bar-col-container-row-col w-100 mw-100 flex-shrink-3 p-0 m-0">
-                  <Sidebar />
-                </Col>
-              </Row>
-            </Container>
-          </Col>
+          {!isToggleSidebarOn && (
+            <Col xs="2" className="sidebar-col p-0 m-0">
+              <Container
+                fluid
+                className="sidebar-col-container mh-100 h-100 mw-100 w-100 p-0 m-0"
+              >
+                <Row className="sidebar-col-container-row mh-100 h-100 mw-100 w-100 p-0 m-0">
+                  <Col className="side-bar-col-container-row-col w-100 mw-100 flex-shrink-3 p-0 m-0">
+                    <Sidebar cards={cards} />
+                  </Col>
+                </Row>
+              </Container>
+            </Col>
+          )}
         </Row>
       </Container>
     );
   }
-
-  mainTitle() {
-    return (
-      <Jumbotron className="d-none d-sm-flex mh-100 pt-0 pb-0 mb-0">
-        <div className="mh-100">
-          <h6 className="display-5 mh-100">Main Board</h6>
-          <p className="d-none d-sm-flex">View of your battlefield.</p>
-        </div>
-      </Jumbotron>
-    );
-  }
-
-  lifeComponent() {
-    return (
-      <Row>
-        <Col className="d-inline-flex">
-          <h5>Life: </h5> <h5 className="">{this.state.life}</h5>
-        </Col>
-        <Col xs="12" className="d-inline-flex">
-          <ButtonGroup className="d-flex" size="sm">
-            <Button
-              outline
-              color="success"
-              onClick={state => this.increment(1)}
-              type="submit"
-            >
-              +1
-            </Button>
-            <Button
-              outline
-              color="warning"
-              onClick={state => this.decrement(1)}
-              type="submit"
-              block
-            >
-              -1
-            </Button>
-          </ButtonGroup>
-        </Col>
-        <Col className="d-inline-flex">
-          <ButtonGroup className="d-flex" size="sm">
-            <Button
-              outline
-              color="primary"
-              onClick={state => this.increment(5)}
-              type="submit"
-            >
-              +5
-            </Button>
-            <Button
-              outline
-              color="danger"
-              onClick={state => this.decrement(5)}
-              type="submit"
-              block
-            >
-              -5
-            </Button>
-          </ButtonGroup>
-        </Col>
-      </Row>
-    );
-  }
 }
 
+GameArea.contextType = GameContext;
+
 GameArea.propTypes = {
-  gameState: PropTypes.shape({}).isRequired,
-  gameActions: PropTypes.shape({}).isRequired
+  cards: PropTypes.array.isRequired
 };
 
 export default GameArea;
