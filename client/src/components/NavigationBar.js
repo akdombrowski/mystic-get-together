@@ -84,13 +84,7 @@ class NavigationBar extends Component {
                     Toggle Sidebar
                   </DropdownItem>
 
-<<<<<<< HEAD
                   <DropdownItem>Option 1</DropdownItem>
-=======
-                  <DropdownItem>
-                    Option 1
-									</DropdownItem>
->>>>>>> c67cf705694d80926d194853d982242e3eb87041
 
                   <DropdownItem>Option 2</DropdownItem>
 
