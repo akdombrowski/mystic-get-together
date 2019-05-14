@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+=======
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import _ from 'lodash';
+>>>>>>> c67cf705694d80926d194853d982242e3eb87041
 import {
   Jumbotron,
   Container,
@@ -21,11 +27,28 @@ class GameArea extends Component {
     super(props);
     this.state = {
       life: 0,
+<<<<<<< HEAD
       isToggleSidebarOn: false
+=======
+      cards,
+      top_row: [],
+      bottom_row: [],
+      isToggleSidebarOn: false,
+>>>>>>> c67cf705694d80926d194853d982242e3eb87041
     };
 
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
+<<<<<<< HEAD
+=======
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { cards } = nextProps;
+    this.setState({
+      cards,
+    });
+>>>>>>> c67cf705694d80926d194853d982242e3eb87041
   }
 
   increment(x) {
@@ -76,15 +99,24 @@ class GameArea extends Component {
         <Row
           className="top-bar-row-wrapper p-0 m-0 d-flex flex-row flex-grow-1 flex-shrink-1"
           style={{
+<<<<<<< HEAD
             "flex-basis": "10%",
             overflow: "auto"
+=======
+            'flex-basis': '10%',
+            overflow: 'auto',
+>>>>>>> c67cf705694d80926d194853d982242e3eb87041
           }}
         >
           <Col
             xs="10"
             className="p-0 m-0"
             style={{
+<<<<<<< HEAD
               "flex-basis": "100%"
+=======
+              'flex-basis': '100%',
+>>>>>>> c67cf705694d80926d194853d982242e3eb87041
             }}
           >
             <NavigationBar
